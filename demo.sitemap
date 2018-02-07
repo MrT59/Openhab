@@ -1,0 +1,3090 @@
+// 09.12.2017
+
+
+sitemap demo label="Übersicht"
+{
+	Switch item=swExpertenmodus
+	//Switch item=swTestSwitch
+	Switch item=AutoOFFquittieren  						mappings=[ON="OK"]
+	Switch item=Wohnzimmer_verlassen				    mappings=[ON="Ein"]
+	Switch item=swRollladen_ProgSun						mappings=[ON="Ein",OFF="Aus"]
+	
+
+	Frame label="Überwachung / Alarme" {
+		/*--- die Heizung ---*/
+		//Text	icon="none"
+		Text item=sen1_Temp4 label="Brauchwassertemperatur" valuecolor=[<28="red",>=35="green"]
+		
+		Switch item=Fehler_Heizkessel		icon="siren" label="Brauchwassertemperatur" visibility=[Fehler_Heizkessel==OFF] 	valuecolor=[ON="red",OFF="green"]	mappings=[OFF ="OK"]	labelcolor=[ON="red",OFF="green"] 	
+		Switch item=Fehler_Heizkessel		icon="siren" label="Brauchwassertemperatur" visibility=[Fehler_Heizkessel==ON] 		valuecolor=[ON="red",OFF="green"]	mappings=[ON="Fehler"]	labelcolor=[ON="red",OFF="green"] 
+		Switch item=Fehler_Heizkessel		icon="siren" label="Brauchwassertemperatur" visibility=[Fehler_Heizkessel==NULL] 										mappings=[NULL="???"]	
+		
+		Switch	item=fibFlood2_Water 		icon="siren" label="Wassermelder Heizung"  	visibility=[fibFlood2_Water==OFF] 	valuecolor=[ON="red",OFF="green"]	mappings=[OFF="OK"]		labelcolor=[ON="red",OFF="green"]
+		Switch	item=fibFlood2_Water 		icon="siren" label="Wassermelder Heizung"  	visibility=[fibFlood2_Water==ON]	valuecolor=[ON="red",OFF="green"]	mappings=[ON="Alarm"]	labelcolor=[ON="red",OFF="green"]
+		Switch	item=fibFlood1_Water 		icon="siren" label="Wassermelder Heizung" 	visibility=[fibFlood2_Water==NULL]	valuecolor=[ON="red",OFF="green"]	mappings=[NULL="???"]
+		
+		/*--- Die Küche ---*/
+		Switch	item=fibFlood1_Water 		icon="siren" label="Wassermelder Küche"  	visibility=[fibFlood1_Water==OFF] 	valuecolor=[ON="red",OFF="green"]	mappings=[OFF="OK"]		labelcolor=[ON="red",OFF="green"]
+		Switch	item=fibFlood1_Water 		icon="siren" label="Wassermelder Küche"  	visibility=[fibFlood1_Water==ON]	valuecolor=[ON="red",OFF="green"]	mappings=[ON="Alarm"]	labelcolor=[ON="red",OFF="green"]
+		Switch	item=fibFlood1_Water 		icon="siren" label="Wassermelder Küche" 	visibility=[fibFlood1_Water==NULL]	valuecolor=[ON="red",OFF="green"]	mappings=[NULL="???"]
+
+		/*--- Einbrecher ---*/
+		Switch item=swBewegungImHaus		icon="siren" label="Bewegung im Haus"  		visibility=[swBewegungImHaus==OFF] 	valuecolor=[ON="red",OFF="green"]	mappings=[OFF="OK"]		labelcolor=[ON="red",OFF="green"]
+		Switch item=swBewegungImHaus		icon="siren" label="Bewegung im Haus"  		visibility=[swBewegungImHaus==ON] 	valuecolor=[ON="red",OFF="green"]	mappings=[OFF="Alarm"]	labelcolor=[ON="red",OFF="green"]
+		Switch item=swBewegungImHaus		icon="siren" label="Bewegung im Haus"  		visibility=[swBewegungImHaus==NULL]	valuecolor=[ON="red",OFF="green"]	mappings=[NULL="???"]
+		
+		Text item=Batt_Status_Uebersicht	icon="siren" label="Bat:" 
+	}
+	
+	Frame label="Energieverbrauch" {
+		
+		Text item=you1_Watt_akt  icon="line" label="Energieverbrauch aktuell" { //label="Energie" icon="line" {
+			Frame {
+		
+				Text item=you1_kWh
+				//Text item=you1_Watt_akt
+				Text item=you1_Watt_akt icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=you1_Watt_akt visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=you1_Watt_akt visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=you1_Watt_akt visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=you1_Watt_akt visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=you1_Watt_akt visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=you1_Watt_akt visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=you1_Watt_akt visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=you1_Watt_akt visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=you1_Watt_akt visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=you1_Watt_akt visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=you1_Watt_akt visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=you1_Watt_akt visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+				
+				Text item=you1_kWh_yesterday
+				Text item=you1_kWh_day		
+				
+				Text item=you1_Cost_yesterday	
+				//Text item=you1_Cost_day
+				Text item=you1_Cost_day {
+					Switch item=Kurvenintervall  mappings=[5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=you1_Cost_yesterday  visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=you1_Cost_yesterday  visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=you1_Cost_yesterday  visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=you1_Cost_yesterday  visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=you1_Cost_yesterday  visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=you1_Cost_yesterday  visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=you1_Cost_yesterday  visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=you1_Cost_yesterday  visibility=[Kurvenintervall==12] period=Y refresh=15000
+				}
+
+				Text item=you1_Signal	
+
+				Switch item=Energieverbrauch_anzeigen			
+			}
+		}
+
+		//Text icon="none"
+		
+		Text item=pwr1_Watt_akt  icon="line" label="Steckdose 1 aktuell" { 
+			Frame {
+				Switch 	item=pwr1_Plug
+				Switch 	item=pwr1_Alarm
+
+				Text 	item=pwr1_kWh 		label="Steckdose 1 gesammt Verbrauch"
+				//Text 	item=pwr1_Watt_akt
+				Text item=pwr1_Watt_akt icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=pwr1_Watt_akt visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=pwr1_Watt_akt visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=pwr1_Watt_akt visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=pwr1_Watt_akt visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=pwr1_Watt_akt visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=pwr1_Watt_akt visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=pwr1_Watt_akt visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=pwr1_Watt_akt visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=pwr1_Watt_akt visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=pwr1_Watt_akt visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=pwr1_Watt_akt visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=pwr1_Watt_akt visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+				
+				Text item=pwr1_kWh_yesterday
+				Text item=pwr1_kWh_day		
+				
+				Text item= pwr1_kWh_daystart
+				Text item= pwr1_kWh_daystart
+				
+				Text item=pwr1_Cost_yesterday	
+				//Text item=pwr1_Cost_day
+				Text item=pwr1_Cost_day {
+					Switch item=Kurvenintervall  mappings=[5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=pwr1_Cost_day  visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=pwr1_Cost_day  visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=pwr1_Cost_day  visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=pwr1_Cost_day  visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=pwr1_Cost_day  visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=pwr1_Cost_day  visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=pwr1_Cost_day  visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=pwr1_Cost_day  visibility=[Kurvenintervall==12] period=Y refresh=15000
+				}
+			}
+		}
+		
+		Text item=pwr2_Watt_akt  icon="line" label="Steckdose 2 aktuell" { 
+			Frame {
+				Switch 	item=pwr2_Plug
+				Switch 	item=pwr2_Alarm
+
+				Text 	item=pwr2_kWh 		label="Steckdose 2 gesammt Verbrauch"
+				//Text 	item=pwr2_Watt_akt
+				Text item=pwr2_Watt_akt icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=pwr2_Watt_akt visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=pwr2_Watt_akt visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=pwr2_Watt_akt visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=pwr2_Watt_akt visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=pwr2_Watt_akt visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=pwr2_Watt_akt visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=pwr2_Watt_akt visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=pwr2_Watt_akt visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=pwr2_Watt_akt visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=pwr2_Watt_akt visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=pwr2_Watt_akt visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=pwr2_Watt_akt visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+				
+				Text item=pwr2_kWh_yesterday
+				Text item=pwr2_kWh_day		
+				
+				Text item= pwr2_kWh_daystart
+				Text item= pwr2_kWh_daystart
+				
+				Text item=pwr2_Cost_yesterday	
+				//Text item=pwr2_Cost_day
+				Text item=pwr2_Cost_day {
+					Switch item=Kurvenintervall  mappings=[5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=pwr2_Cost_day  visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=pwr2_Cost_day  visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=pwr2_Cost_day  visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=pwr2_Cost_day  visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=pwr2_Cost_day  visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=pwr2_Cost_day  visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=pwr2_Cost_day  visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=pwr2_Cost_day  visibility=[Kurvenintervall==12] period=Y refresh=15000
+				}
+			}
+		}		
+		
+		Text item=pwr3_Watt_akt  icon="line" label="Steckdose 3 aktuell" { 
+			Frame {
+				Switch 	item=pwr3_Plug
+				Switch 	item=pwr3_Alarm
+
+				Text 	item=pwr3_kWh 		label="Steckdose 3 gesammt Verbrauch"
+				//Text 	item=pwr3_Watt_akt
+				Text item=pwr3_Watt_akt icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=pwr3_Watt_akt visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=pwr3_Watt_akt visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=pwr3_Watt_akt visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=pwr3_Watt_akt visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=pwr3_Watt_akt visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=pwr3_Watt_akt visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=pwr3_Watt_akt visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=pwr3_Watt_akt visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=pwr3_Watt_akt visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=pwr3_Watt_akt visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=pwr3_Watt_akt visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=pwr3_Watt_akt visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+				
+				Text item=pwr3_kWh_yesterday
+				Text item=pwr3_kWh_day		
+				
+				Text item= pwr3_kWh_daystart
+				Text item= pwr3_kWh_daystart
+				
+				Text item=pwr3_Cost_yesterday	
+				//Text item=pwr3_Cost_day
+				Text item=pwr3_Cost_day {
+					Switch item=Kurvenintervall  mappings=[5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=pwr3_Cost_day  visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=pwr3_Cost_day  visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=pwr3_Cost_day  visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=pwr3_Cost_day  visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=pwr3_Cost_day  visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=pwr3_Cost_day  visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=pwr3_Cost_day  visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=pwr3_Cost_day  visibility=[Kurvenintervall==12] period=Y refresh=15000
+				}
+			}
+		}		
+		
+	}
+
+	
+	Frame label="Lichtsteuerung" icon="colorwheel" {
+ 		Text label="Wohnzimmer" icon="slider" {
+			Frame label="Wohnzimmer" {	
+			
+			    Switch 			item=swi1_Switch1			label="Lichtschalter links"
+				Switch 			item=swi1_Switch2			label="Lichtschalter rechts"
+			
+				Switch     		item=HUE_LavaLampe_B		label="Lava_Lampe"
+				Slider    		item=HUE_LavaLampe_B		label="Lava_Lampe [%d %%]"
+				
+				Switch     		item=HUE_Tannenbaum_B		label="Tannenbaum"
+				Text 										icon="none"
+				
+				Switch     		item=HUE_Baum_L_B			label="Baum links"
+				Switch     		item=HUE_Baum_R_B			label="Baum rechts"
+			
+			
+				Switch     		item=HUE_Ecke_L_C			label="LED links"
+				Colorpicker		item=HUE_Ecke_L_C      		label="LED links Farbe"
+				
+				Switch      	item=HUE_Ecke_R_C    		label="LED rechts"
+				Colorpicker		item=HUE_Ecke_R_C      		label="LED rechts Farbe"
+				
+				Switch        	item=HUE_Schrank_N_C     	label="Schrank_Norden"
+				Colorpicker    	item=HUE_Schrank_N_C  
+				
+				Switch         	item=HUE_Schrank_S_C		label="Schrank_Süden"
+				Colorpicker    	item=HUE_Schrank_S_C    	
+				
+				Switch 			item=HUE_Strip_Schrank_C	label="Strip Schrank"
+				Colorpicker		item=HUE_Strip_Schrank_C 
+				
+				Switch         	item=HUE_Strip_Fenster_C	label="Strip Fenster"
+				Colorpicker    	item=HUE_Strip_Fenster_C 
+				Slider   		item=HUE_Strip_Fenster_T
+							
+			}
+ 		}
+		
+ 		Text label="Katrins Zimmer" icon="slider" {
+			Frame label="Katrins Zimmer" icon="slider" {
+				Switch     		item=HUE_Lampe_Katrin_B 			
+			}
+ 		}
+		
+ 		Text label="Arbeitszimmer" icon="slider" {
+			Frame label="Arbeitszimmer" icon="slider" {
+				Switch     		item=HUE_Lampe_AZ_B 			
+			}
+ 		}
+		
+		Text label="Treppenhaus" icon="slider" {
+			
+			Frame label="Flur unten" icon="slider" {
+				Switch 			item=swLichtFlurEG
+				Switch 			item=LichtFlurEG_Status 
+
+				Switch 			item=swLichtVorFlur
+				Switch 			item=LichtVorflur_Status 
+								
+			}
+			
+			Frame label="Treppenhaus OBEN" icon="slider" {
+				Switch     		item=HUE_Strip_1_C	
+				Colorpicker    	item=HUE_Strip_1_C 	
+			}
+			
+			Frame label="Treppenhaus UNTEN" icon="slider" {
+				Switch		item=rgbw1_Color	label="Color Ein/Aus" 	
+				Colorpicker item=rgbw1_Color	label="Farbe [%d %%]" 
+				
+				Slider 		item=rgbw1_WHITE	label="WHITE [%s %%]"
+				Slider 		item=rgbw1_RED 		label="RED   [%s %%]"			
+				Slider 		item=rgbw1_GREEN 	label="GREEN [%d %%]"		
+				Slider 		item=rgbw1_BLUE		label="BLUE  [%s %%]"	
+			}
+			
+			Frame label="Treppenhaus KELLER" icon="slider" {
+				Switch		item=rgbw2_Color	label="Color Ein/Aus" 	
+				Colorpicker item=rgbw2_Color	label="Farbe [%d %%]" 
+				
+				Slider 		item=rgbw2_WHITE	label="Kellertreppe (W) [%s %%]"
+				Slider 		item=rgbw2_RED 		label="Bastelkeller (R) [%s %%]"			
+				Slider 		item=rgbw2_GREEN 	label="Vorratskeller (G) [%d %%]"		
+				Slider 		item=rgbw2_BLUE		label="BLUE  [%s %%]"
+			}
+
+ 		}		
+		
+		Text label="Lichtszenen" icon="colorwheel" {
+			Frame label="Lichtszenen" {
+				Switch item=HueScene_WZ_aus		 	mappings=[ON="Los"]
+				Switch item=HueScene_WZ_Hell  		mappings=[ON="Los"]
+				Switch item=HueScene_WZ_Film  		mappings=[ON="Los"]
+				Switch item=HueScene_WZ_Fussball  	mappings=[ON="Los"]
+				
+				Switch item=HueScene_WZ_Lavalampe 	mappings=[ON="Los"]
+				Switch item=HueScene_WZ_Tannenbaum 	mappings=[ON="Los"]
+
+				Switch item=HueScene_WZ_Szene1	 	mappings=[ON="Los"]
+				Switch item=HueScene_WZ_Szene2	 	mappings=[ON="Los"]
+				Switch item=HueScene_WZ_Szene3	 	mappings=[ON="Los"]
+
+				Switch item=HueScene_WZ_Morgens 	mappings=[ON="Los"]
+				Switch item=HueScene_WZ_Abwesend1 	mappings=[ON="Los"]
+				Switch item=HueScene_WZ_Abwesend2 	mappings=[ON="Los"]
+			}
+		}
+ 	}
+
+	Frame label="Rollladensteuerung" {	 
+		Text  item=rol_Shutter_SumWert		label="Gruppensteuerung" icon="rollershutter" {	
+		
+			Switch item=scRollladen_alle_stop 		label="alle stop"			mappings=[ON="Press"]
+			Switch item=scRollladen_alle_hoch 		label="alle Hoch"			mappings=[ON="Press"]
+			Switch item=scRollladen_alle_runter		label="alle Runter"			mappings=[ON="Press"]
+			Switch item=scRollladen_Sueden_hoch 	label="Süden Hoch"	 		mappings=[ON="Press"]
+			Switch item=scRollladen_Sueden_runter	label="Süden Runter"		mappings=[ON="Press"]
+			Switch item=scRollladen_Kleine_hoch 	label="Kleine Hoch"			mappings=[ON="Press"]
+			Switch item=scRollladen_Kleine_runter	label="Kleine Runter"		mappings=[ON="Press"]
+			Switch item=scRollladen_Sueden_Sonne	label="Süden Sonne"	 		mappings=[ON="Press"]
+			Switch item=scRollladen_Osten_Sonne		label="Osten Sonne"			mappings=[ON="Press"]
+			Switch item=scRollladen_Sueden_lueften	label="Süden lüften"		mappings=[ON="Press"]
+			Switch item=scRollladen_Kueche_lueften_ein	label="Küche lüften"	mappings=[ON="Press"]
+			Switch item=scRollladen_Beamer1			label="Beamer hell"			mappings=[ON="Press"]
+			Switch item=scRollladen_Beamer2			label="Beamer abgedunkelt"	mappings=[ON="Press"]
+			Switch item=scRollladen_Beamer3			label="Beamer dunkel"		mappings=[ON="Press"]
+		}
+		
+		Text  item=rol_Shutter_Summe 	 	label="Einzelsteuerung" {
+			Frame label="Küche" {
+				Text item=rol1_Shutter 		label="Küche (Norden) [%d %%]"
+				Switch item=rol1_Shutter	label="" 	icon="none"		mappings=[UP="auf", STOP="X", DOWN="zu"]
+				
+				Text item=rol2_Shutter 		label="Küche (Osten) [%d %%]"
+				Switch item=rol2_Shutter	label="" 	icon="none"		mappings=[UP="auf", STOP="X", DOWN="zu"]
+			}
+			
+			Frame label="Wohnzimmer"  {
+				
+				Text item=rol3_Shutter 		label="Wohnzimmer (Osten) [%d %%]"
+				Switch item=rol3_Shutter	label="" 	icon="none"		mappings=[UP="auf", STOP="X", DOWN="zu"]
+				
+				Text item=rol4_Shutter 		label="Wohnzimmer (Links) [%d %%]"
+				Switch item=rol4_Shutter	label="" 	icon="none"		mappings=[UP="auf", STOP="X", DOWN="zu"]
+						
+				Text item=rol5_Shutter 		label="Wohnzimmer (Rechts) [%d %%]"
+				Switch item=rol5_Shutter	label="" 	icon="none"		mappings=[UP="auf", STOP="X", DOWN="zu"]
+			}
+		}
+	}
+		
+	
+	Frame label="Multimedia" {
+	    Text label="Szenen" {
+			Switch item=Anlage_ausschalten  	icon="none" 	mappings=[ON="Aus"]
+			Text 								icon="none"
+			Switch item=Radio_einschalten  		icon="none" 	mappings=[ON="Los"]
+			Switch item=Video_einschalten  		icon="none" 	mappings=[ON="Los"]	
+			Switch item=DVD_einschalten  		icon="none" 	mappings=[ON="Los"]	
+			Switch item=FireTV_einschalten  	icon="none" 	mappings=[ON="Los"]	
+        }
+		
+		Text label="HiFi-Geräte" {
+			Text label="Yamaha" icon="receiver" {
+				Frame label="Yamaha Reciver A830"  { 
+					Switch 		item=RXA830_Powerstate	
+					Selection 	item=RXA830_Input 												icon="none"			mappings=[HDMI1="DVD",HDMI2="Dreambox",HDMI4="FireTV","NET RADIO"="NetRadio",TUNER="Tuner",CD="CD",Phono="Plattenspieler"]		
+									
+					Setpoint	item=RXA830_Volume   										    icon="soundvolume"  minValue=10 maxValue=50 step=1
+					Selection 	item=RXA830_Surround 											icon="none"			mappings=["2ch Stereo"="2ch","7ch Stereo"="7ch","Surround Decoder"="Surround Decoder", "Sci-Fi"="Sci-Fi", "Music Video"="Musik Video", "Straight"="Straight"]
+		
+					Selection 	item=RXA830_NetRadio visibility=[RXA830_Input ==TUNER] 			label="Sender" 		mappings=[1="N Joy", 2="Radio Sport", 3="RDU", 4="91ZM", 5="Hauraki"]
+					Selection 	item=RXA830_NetRadio visibility=[RXA830_Input =="NET RADIO"] 	label="NetRadio" 	mappings=[1="N Joy", 2="Radio Sport", 3="RDU", 4="91ZM", 5="Hauraki"]
+					
+					Switch 		item=RXA830_Mute												icon="soundvolume_mute"
+					
+				}
+				
+	//			Frame label="Yamaha Reciver A2700"  { 
+	// 				Switch 		item=RXA2700_Powerstate 
+	// 				Slider		item=RXA2700_Volume  	visibility=[RXA2700_Powerstate ==ON]  	icon=""
+	//         	  	Selection 	item=RXA2700_Input 	 	visibility=[RXA2700_Powerstate ==ON] 															mappings=[HDMI1="BlueRay",HDMI2="Dreambox","NET RADIO"="NetRadio",TUNER="Tuner",CD="CD",Phono="Plattenspieler"]		
+	// 				Selection 	item=RXA2700_NetRadio 	visibility=[RXA2700_Input ==TUNER] 		label="Sender" 	mappings=[1="N Joy", 2="Radio Sport", 3="RDU", 4="91ZM", 5="Hauraki"]
+	// 				Selection 	item=RXA2700_NetRadio 	visibility=[RXA2700_Input =="NET RADIO"] label="Sender" mappings=[1="N Joy", 2="Radio Sport", 3="RDU", 4="91ZM", 5="Hauraki"]
+	// 				Selection 	item=RXA2700_Surround 	visibility=[RXA2700_Powerstate ==ON] 	icon=""							 								mappings=["2ch Stereo"="2ch","7ch Stereo"="7ch","Surround Decoder"="Surround Decoder", "Sci-Fi"="Sci-Fi", "Music Video"="Musik Video", "Straight"="Straight"]
+	//          }
+			}
+			
+			Text label="Dreamboxen" icon="receiver" { 		
+				Frame label="Dreambox 7080 Wohnzimmer" {
+					Text 	item=DM7080Powerstate 	
+					Text 	item=DM7080actVol       	icon="soundvolume" 	
+					Text 	item=DM7080actChannel 			
+					//Slider	item=DM7080setChannel	icon="" 
+					Slider  item=DM7080setVol		    icon="soundvolume" 
+					Switch 	item=DM7080sendPause			
+					Switch 	item=DM7080sendMute							
+				}	
+				
+				Frame label="Dreambox 7020 Arbeitszimmer" {			           
+					Text 	item=DM7080Powerstate 	
+					Text 	item=DM7020actVol        	icon="soundvolume" 
+					Text 	item=DM7020actChannel 	
+					//Slider	item=DM7020setChannel	icon=""
+					Slider  item=DM7020setVol	    	icon=""
+					Switch 	item=DM7020sendPause		
+					Switch 	item=DM7020sendMute	
+
+					Text	item=DM7020CurrentEvent
+				}
+				
+				Frame label="Dreamboxstatus" {
+					//Switch  item=Presence
+					Switch  item=ipDM195 
+					Text	item=ipDM195ms  
+					Switch  item=ipDM196
+					Text	item=ipDM196ms  
+					Switch  item=ipDM197  
+					Text	item=ipDM197ms  
+					Switch  item=ipDM198  
+					Text	item=ipDM198ms  
+				   
+					Text item=Presence label="Dreambox Online Status" {
+						Switch item=Kurvenintervall  mappings=[1=1h, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+						Chart item=gDreambox visibility=[Kurvenintervall==1] period=h refresh=15000
+						Chart item=gDreambox visibility=[Kurvenintervall==2] period=4h refresh=15000
+						Chart item=gDreambox visibility=[Kurvenintervall==3] period=8h refresh=15000
+						Chart item=gDreambox visibility=[Kurvenintervall==4] period=12h refresh=15000
+						Chart item=gDreambox visibility=[Kurvenintervall==5] period=D refresh=15000
+						Chart item=gDreambox visibility=[Kurvenintervall==6] period=3D refresh=15000
+						Chart item=gDreambox visibility=[Kurvenintervall==7] period=W refresh=15000
+						Chart item=gDreambox visibility=[Kurvenintervall==8] period=2W refresh=15000
+						Chart item=gDreambox visibility=[Kurvenintervall==9] period=M refresh=15000
+						Chart item=gDreambox visibility=[Kurvenintervall==10] period=2M refresh=15000
+						Chart item=gDreambox visibility=[Kurvenintervall==11] period=4M refresh=15000
+						Chart item=gDreambox visibility=[Kurvenintervall==12] period=Y refresh=15000
+					}
+
+				}			
+			}
+			
+			Text label="Philips TV" icon="television" {
+				Frame label="Remote"	{
+					Switch item=TV7008_Standby
+					Switch item=TV7008_VolumeUpDown 				mappings=[ON="Up", OFF="Down"]
+					Switch item=TV7008_ChannelStep 					mappings=[ON="Up", OFF="Down"]
+					Switch item=TV7008_AmbilightOnOff 				mappings=[ON="Press"]
+					Switch item=TV7008_Ambilight	 				mappings=[ON="Press"]
+					Switch item=TV7008_Source  
+					Switch item=TV7008_PlayPause 
+					Switch item=TV7008_OK			 				mappings=[ON="Press"]
+				}
+				
+				Frame label="Volume"  {
+					Switch 		item=TV7008_MuteSwitch
+					Slider 		item=TV7008_VolumeTV
+					Text 		item=TV7008_VolumeTV
+					Setpoint 	item=TV7008_VolumeTV
+				} 
+		
+				Frame label="Ambilight"  {
+					Switch item=TV7008_ActivateAmbilight
+					Switch item=TV7008_Ambilight_mode 		label="Ambilight Mode" mappings=[0=Internal, 1=Manual, 2=Expert]
+					
+					Switch item=swTV7008_Ambilight
+					Switch item=swTV7008_AmbilightExt
+					
+					
+			
+	//				Colorpicker item=TV7008_AmbilightAll		label="All [%s]"
+	//				Colorpicker item=TV7008_AmbilightLeft		label="Left [%s]"
+	//				Colorpicker item=TV7008_AmbilightRight		label="Right [%s]"
+	//				Colorpicker item=TV7008_AmbilightPixelLeft
+				}			
+			}		
+		}
+	}
+
+	
+	Frame label="Kameras" {
+		
+		Text label="Door Bird Türklingel" icon="camera" {
+			Frame label="Door Bird Türklingel" {
+				Webview label="DoorBird Türklingel" url="http://172.16.55.105/bha-api/video.cgi?http-user=ggyzwh0002&http-password=ynapzsoggh" height=14
+
+//			    Webview label="DoorBird Türklingel" url="http://ggyzwh0002:ynapzsoggh@172.16.55.105/bha-api/video.cgi" height=14
+//				Webview                             url="http://ggyzwh0002:ynapzsoggh@172.16.55.105/bha-api/view.html" height=12	   			
+	   			
+	   			Text label="DoorBird Historie 01-10" icon="video" {
+		  		Frame label="DoorBird Historie"  {
+					Image url="http://ggyzwh0002:ynapzsoggh@172.16.55.105/bha-api/history.cgi?index=1" 	
+					Image url="http://ggyzwh0002:ynapzsoggh@172.16.55.105/bha-api/history.cgi?index=2" 	
+					Image url="http://ggyzwh0002:ynapzsoggh@172.16.55.105/bha-api/history.cgi?index=3" 	
+					Image url="http://ggyzwh0002:ynapzsoggh@172.16.55.105/bha-api/history.cgi?index=4" 	
+					Image url="http://ggyzwh0002:ynapzsoggh@172.16.55.105/bha-api/history.cgi?index=5" 	
+					Image url="http://ggyzwh0002:ynapzsoggh@172.16.55.105/bha-api/history.cgi?index=6" 	
+					Image url="http://ggyzwh0002:ynapzsoggh@172.16.55.105/bha-api/history.cgi?index=7" 	
+					Image url="http://ggyzwh0002:ynapzsoggh@172.16.55.105/bha-api/history.cgi?index=8" 	
+					Image url="http://ggyzwh0002:ynapzsoggh@172.16.55.105/bha-api/history.cgi?index=9" 	
+					Image url="http://ggyzwh0002:ynapzsoggh@172.16.55.105/bha-api/history.cgi?index=10" 	
+				}
+				}	
+	   			Text label="DoorBird Historie 11-20" icon="video" {
+		  		Frame label="DoorBird Historie"  {
+					Image url="http://ggyzwh0002:ynapzsoggh@172.16.55.105/bha-api/history.cgi?index=11" 	
+					Image url="http://ggyzwh0002:ynapzsoggh@172.16.55.105/bha-api/history.cgi?index=12" 	
+					Image url="http://ggyzwh0002:ynapzsoggh@172.16.55.105/bha-api/history.cgi?index=13" 	
+					Image url="http://ggyzwh0002:ynapzsoggh@172.16.55.105/bha-api/history.cgi?index=14" 	
+					Image url="http://ggyzwh0002:ynapzsoggh@172.16.55.105/bha-api/history.cgi?index=15" 	
+					Image url="http://ggyzwh0002:ynapzsoggh@172.16.55.105/bha-api/history.cgi?index=16" 	
+					Image url="http://ggyzwh0002:ynapzsoggh@172.16.55.105/bha-api/history.cgi?index=17" 	
+					Image url="http://ggyzwh0002:ynapzsoggh@172.16.55.105/bha-api/history.cgi?index=18" 	
+					Image url="http://ggyzwh0002:ynapzsoggh@172.16.55.105/bha-api/history.cgi?index=19" 	
+					Image url="http://ggyzwh0002:ynapzsoggh@172.16.55.105/bha-api/history.cgi?index=20" 	
+				}
+				}	
+			}
+		}
+		
+		
+		Text label="WansView IP-Camera Innen" icon="camera" {
+			Frame label="WansView IP-Camera Innen" {
+				Webview label="WansView IP-Camera" url="http://admin:suelz@172.16.55.90/web/mobile.html" height=13
+				Webview label="WansView IP-Camera" url="http://172.16.55.90/mjpeg/snap.cgi?user=admin&pwd=suelz" height=13
+
+				//Webview label="WansView IP-Camera" url="http://172.16.55.90/videostream.cgi?user=admin&pwd=suelz" height=13
+			}
+		}
+		
+		Text label="WansView IP-Camera Garten" icon="camera" {
+			Frame label="WansView IP-Camera Garten" {
+				//Webview label="WansView IP-Camera" url="http://admin:suelz@172.16.55.91/mjpeg/snap.cgi" height=13
+				//Webview label="WansView IP-Camera" url="http://172.16.55.91/mjpeg/snap.cgi?chn=0" height=13
+				Webview label="WansView IP-Camera" url="http://172.16.55.91/mjpeg/snap.cgi?user=admin&pwd=suelz" height=13
+				
+				//Webview label="WansView IP-Camera" url="http://172.16.55.91/videostream.cgi?user=admin&pwd=suelz" height=13
+			}
+		}
+	}
+	
+	
+	Frame label="Wetter" {
+		
+		Text item=Date2 label="Datum und Sonne" icon="wind" {
+			Frame {
+				Text 	item=Date
+				Text 						icon="none"
+		
+				Text    item=Sunrise_Time	icon="sunrise"	//	label="Sonnenaufgang [%1tH:%1$tM]"
+				Text    item=Sunset_Time  	icon="sunset"	//	label="Sonnenuntergang [%1tH:%1$tM]"
+				Text    item=Moonrise_Time 	icon="moon"		//	label="Mondaufgang [%1tH:%1$tM]"
+				Text    item=Moonset_Time 	icon="moon"		//	label="Monduntergang [%1tH:%1$tM]"
+
+				Text label="Details" icon="info" {
+					Frame label="Jahreszeit"{
+						Text item=Zodiac_Sign_Ger
+						Text item=Season_Name_Ger
+						
+						Text item=Sun_Azimuth
+						Text item=Sun_Elevation
+					}
+					
+					Frame label="Details zum Mond" {
+						Text item=Moonrise_Time 
+						Text item=Moonset_Time 	
+
+						Text item=Moon_Zodiac_Sign_Ger
+						Text item=Moon_Phase_Ger
+						
+						Text item=Moon_Distance_Time
+						Text item=Moon_Distance_K
+
+
+						Text item=Moon_Full
+						Text 							icon="none"
+						Text item=Moon_Azimuth
+						Text item=Moon_Elevation
+					}
+				}
+			}
+		}		
+		
+		Text  icon="none" 
+		
+		
+		Text item=owmLGHUebersicht { 
+			Frame label="Open Weather Map - Langenhagen"{  
+				
+				
+				Text item=LGH_Temperature {
+					//Selection item=Kurvenintervall  mappings=[1=Stunde, 2=24Std, 3=Woche, 4=Monat]
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=24Std, 3=Woche, 4=Monat]
+					Chart item=LGH_Temperature visibility=[Kurvenintervall==1] period=h refresh=600
+					Chart item=LGH_Temperature visibility=[Kurvenintervall==2] period=d refresh=600
+					Chart item=LGH_Temperature visibility=[Kurvenintervall==3] period=W refresh=600
+					Chart item=LGH_Temperature visibility=[Kurvenintervall==4] period=M refresh=600	
+				}
+				
+				Text item=LGH_Clouds icon="sun_clouds" {
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=24Std, 3=Woche, 4=Monat]
+					Chart item=LGH_Clouds visibility=[Kurvenintervall==1] period=h refresh=600
+					Chart item=LGH_Clouds visibility=[Kurvenintervall==2] period=d refresh=600
+					Chart item=LGH_Clouds visibility=[Kurvenintervall==3] period=W refresh=600
+					Chart item=LGH_Clouds visibility=[Kurvenintervall==4] period=M refresh=600	
+					
+				}
+
+				Text item=LGH_Pressure icon="line-incline" {
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=24Std, 3=Woche, 4=Monat]
+					Chart item=LGH_Pressure visibility=[Kurvenintervall==1] period=h refresh=600
+					Chart item=LGH_Pressure visibility=[Kurvenintervall==2] period=d refresh=600
+					Chart item=LGH_Pressure visibility=[Kurvenintervall==3] period=W refresh=600
+					Chart item=LGH_Pressure visibility=[Kurvenintervall==4] period=M refresh=600
+				} 
+				
+				Text item=owmLGHLuftdruckTrend icon="line-stagnation"
+									
+				Text item=LGH_Windspeed {
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=24Std, 3=Woche, 4=Monat]
+					Chart item=LGH_Windspeed visibility=[Kurvenintervall==1] period=h refresh=600
+					Chart item=LGH_Windspeed visibility=[Kurvenintervall==2] period=d refresh=600
+					Chart item=LGH_Windspeed visibility=[Kurvenintervall==3] period=W refresh=600
+					Chart item=LGH_Windspeed visibility=[Kurvenintervall==4] period=M refresh=600
+				}
+				
+	        	Text item=owmLGHWindrichtung icon="wind"
+				
+				Text item=LGH_Humidity {
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=24Std, 3=Woche, 4=Monat]
+					Chart item=LGH_Humidity visibility=[Kurvenintervall==1] period=h refresh=600
+					Chart item=LGH_Humidity visibility=[Kurvenintervall==2] period=d refresh=600
+					Chart item=LGH_Humidity visibility=[Kurvenintervall==3] period=W refresh=600
+					Chart item=LGH_Humidity visibility=[Kurvenintervall==4] period=M refresh=600
+				}           
+	
+	        	Text item=owmLGHWindgrad icon="wind"
+		        	
+				
+	        	Text item=owmLGHRegen 	icon="rain"
+	        	Text item=owmLGHSchnee  icon="rain"    	
+		    }	
+
+			Frame label="Langenhagen min/max Temperaturen" {
+			Text item=owmLGHTempMin label="Langenhagen min/max Temperaturen" icon="line" {	
+			
+				Text item=owmLGHTempMin
+				Text item=owmLGHTempMax
+				Text item=owmLGHTempMin1
+				Text item=owmLGHTempMax1	
+				Text item=owmLGHTempMin2
+				Text item=owmLGHTempMax2	
+				Text item=owmLGHTempMin3
+				Text item=owmLGHTempMax3	
+				Text item=owmLGHTempMin4
+				Text item=owmLGHTempMax4	
+				
+			}
+			Text item=owmLGHTempMax
+			}
+			
+			
+			
+			Frame label="Langenhagen Wetterverlauf" {
+			Text label="Historische Daten" icon="line" {	
+				Switch item=Kurvenintervall  mappings=[1=Stunde, 2=24Std, 3=Woche, 4=Monat]
+				
+				Chart item=LGH_Temperature visibility=[Kurvenintervall==1] period=h refresh=600
+				Chart item=LGH_Temperature visibility=[Kurvenintervall==2] period=d refresh=600
+				Chart item=LGH_Temperature visibility=[Kurvenintervall==3] period=W refresh=600
+				Chart item=LGH_Temperature visibility=[Kurvenintervall==4] period=M refresh=600
+
+				Chart item=LGH_Pressure visibility=[Kurvenintervall==1] period=h refresh=600
+				Chart item=LGH_Pressure visibility=[Kurvenintervall==2] period=d refresh=600
+				Chart item=LGH_Pressure visibility=[Kurvenintervall==3] period=W refresh=600
+				Chart item=LGH_Pressure visibility=[Kurvenintervall==4] period=M refresh=600
+
+				Chart item=LGH_Humidity visibility=[Kurvenintervall==1] period=h refresh=600
+				Chart item=LGH_Humidity visibility=[Kurvenintervall==2] period=d refresh=600
+				Chart item=LGH_Humidity visibility=[Kurvenintervall==3] period=W refresh=600
+				Chart item=LGH_Humidity visibility=[Kurvenintervall==4] period=M refresh=600
+
+				Chart item=LGH_Windspeed visibility=[Kurvenintervall==1] period=h refresh=600
+				Chart item=LGH_Windspeed visibility=[Kurvenintervall==2] period=d refresh=600
+				Chart item=LGH_Windspeed visibility=[Kurvenintervall==3] period=W refresh=600
+				Chart item=LGH_Windspeed visibility=[Kurvenintervall==4] period=M refresh=600
+ 
+				Chart item=LGH_Clouds visibility=[Kurvenintervall==1] period=h refresh=600
+				Chart item=LGH_Clouds visibility=[Kurvenintervall==2] period=d refresh=600
+				Chart item=LGH_Clouds visibility=[Kurvenintervall==3] period=W refresh=600
+				Chart item=LGH_Clouds visibility=[Kurvenintervall==4] period=M refresh=600
+   
+				Switch item=Kurvenintervall  mappings=[1=Stunde, 2=24Std, 3=Woche, 4=Monat]
+			}
+			}
+		}
+			
+		Text item=owmLonstrupUebersicht {
+			Frame label="Open Weather Map - Lönstrup"{ 
+			
+				Text item=Lonstrup_Temperature {
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=24Std, 3=Woche, 4=Monat]
+					Chart item=Lonstrup_Temperature visibility=[Kurvenintervall==1] period=h refresh=600
+					Chart item=Lonstrup_Temperature visibility=[Kurvenintervall==2] period=d refresh=600
+					Chart item=Lonstrup_Temperature visibility=[Kurvenintervall==3] period=W refresh=600
+					Chart item=Lonstrup_Temperature visibility=[Kurvenintervall==4] period=M refresh=600
+				}    
+
+				Text item=Lonstrup_Pressure {
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=24Std, 3=Woche, 4=Monat]
+					Chart item=Lonstrup_Pressure visibility=[Kurvenintervall==1] period=h refresh=600
+					Chart item=Lonstrup_Pressure visibility=[Kurvenintervall==2] period=d refresh=600
+					Chart item=Lonstrup_Pressure visibility=[Kurvenintervall==3] period=W refresh=600
+					Chart item=Lonstrup_Pressure visibility=[Kurvenintervall==4] period=M refresh=600
+				}      
+	        	Text item=owmLonstrupLuftdruckTrend
+				Text item=owmLonstrupFeuchte icon="selfWater"
+								
+	        	Text item=owmLonstrupWindgeschwindigkeit icon="wind"
+	        	Text item=owmLonstrupWindrichtung icon="wind"
+				
+				Text item=owmLonstrupWolken
+	        	Text item=owmLonstrupWindgrad icon="wind"
+				
+
+	        	Text item=owmLonstrupRegen icon="rain"
+	        	Text item=owmLonstrupSchnee							
+			}	
+	
+		
+			Frame label="Lönstrup Wetterverlauf" {
+				Text label="Historische Daten"  icon="line" {
+		
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=24Std, 3=Woche, 4=Monat]
+					
+					Chart item=Lonstrup_Temperature visibility=[Kurvenintervall==1] period=h refresh=600
+					Chart item=Lonstrup_Temperature visibility=[Kurvenintervall==2] period=d refresh=600
+					Chart item=Lonstrup_Temperature visibility=[Kurvenintervall==3] period=W refresh=600
+					Chart item=Lonstrup_Temperature visibility=[Kurvenintervall==4] period=M refresh=600
+
+					Chart item=Lonstrup_Pressure visibility=[Kurvenintervall==1] period=h refresh=600
+					Chart item=Lonstrup_Pressure visibility=[Kurvenintervall==2] period=d refresh=600
+					Chart item=Lonstrup_Pressure visibility=[Kurvenintervall==3] period=W refresh=600
+					Chart item=Lonstrup_Pressure visibility=[Kurvenintervall==4] period=M refresh=600
+
+					Chart item=Lonstrup_Humidity visibility=[Kurvenintervall==1] period=h refresh=600
+					Chart item=Lonstrup_Humidity visibility=[Kurvenintervall==2] period=d refresh=600
+					Chart item=Lonstrup_Humidity visibility=[Kurvenintervall==3] period=W refresh=600
+					Chart item=Lonstrup_Humidity visibility=[Kurvenintervall==4] period=M refresh=600
+
+					Chart item=Lonstrup_Windspeed visibility=[Kurvenintervall==1] period=h refresh=600
+					Chart item=Lonstrup_Windspeed visibility=[Kurvenintervall==2] period=d refresh=600
+					Chart item=Lonstrup_Windspeed visibility=[Kurvenintervall==3] period=W refresh=600
+					Chart item=Lonstrup_Windspeed visibility=[Kurvenintervall==4] period=M refresh=600
+   
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=24Std, 3=Woche, 4=Monat]
+				}	
+			}
+		}
+		
+		Text item=owmBorUebersicht {
+			Frame label="Open Weather Map - Bor (Vernamo)"{ 
+			
+				Text item=Bor_Temperature {
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=24Std, 3=Woche, 4=Monat]
+					Chart item=Bor_Temperature visibility=[Kurvenintervall==1] period=h refresh=600
+					Chart item=Bor_Temperature visibility=[Kurvenintervall==2] period=d refresh=600
+					Chart item=Bor_Temperature visibility=[Kurvenintervall==3] period=W refresh=600
+					Chart item=Bor_Temperature visibility=[Kurvenintervall==4] period=M refresh=600
+				}    
+
+				Text item=Bor_Pressure {
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=24Std, 3=Woche, 4=Monat]
+					Chart item=Bor_Pressure visibility=[Kurvenintervall==1] period=h refresh=600
+					Chart item=Bor_Pressure visibility=[Kurvenintervall==2] period=d refresh=600
+					Chart item=Bor_Pressure visibility=[Kurvenintervall==3] period=W refresh=600
+					Chart item=Bor_Pressure visibility=[Kurvenintervall==4] period=M refresh=600
+				}      
+	        	Text item=owmBorLuftdruckTrend
+				Text item=owmBorFeuchte icon="selfWater"
+								
+	        	Text item=owmBorWindgeschwindigkeit icon="wind"
+	        	Text item=owmBorWindrichtung icon="wind"
+	        	
+	        	Text item=owmBorWolkenm
+				Text item=owmBorWindgrad icon="wind"
+				
+
+	        	Text item=owmBorRegen icon="rain"
+	        	Text item=owmBorSchnee
+								
+			}	
+	
+		
+			Frame label="Bor Wetterverlauf" {
+				Text label="Historische Daten"  icon="line" {
+		
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=24Std, 3=Woche, 4=Monat]
+					
+					Chart item=Bor_Temperature visibility=[Kurvenintervall==1] period=h refresh=600
+					Chart item=Bor_Temperature visibility=[Kurvenintervall==2] period=d refresh=600
+					Chart item=Bor_Temperature visibility=[Kurvenintervall==3] period=W refresh=600
+					Chart item=Bor_Temperature visibility=[Kurvenintervall==4] period=M refresh=600
+
+					Chart item=Bor_Pressure visibility=[Kurvenintervall==1] period=h refresh=600
+					Chart item=Bor_Pressure visibility=[Kurvenintervall==2] period=d refresh=600
+					Chart item=Bor_Pressure visibility=[Kurvenintervall==3] period=W refresh=600
+					Chart item=Bor_Pressure visibility=[Kurvenintervall==4] period=M refresh=600
+
+					Chart item=Bor_Humidity visibility=[Kurvenintervall==1] period=h refresh=600
+					Chart item=Bor_Humidity visibility=[Kurvenintervall==2] period=d refresh=600
+					Chart item=Bor_Humidity visibility=[Kurvenintervall==3] period=W refresh=600
+					Chart item=Bor_Humidity visibility=[Kurvenintervall==4] period=M refresh=600
+
+					Chart item=Bor_Windspeed visibility=[Kurvenintervall==1] period=h refresh=600
+					Chart item=Bor_Windspeed visibility=[Kurvenintervall==2] period=d refresh=600
+					Chart item=Bor_Windspeed visibility=[Kurvenintervall==3] period=W refresh=600
+					Chart item=Bor_Windspeed visibility=[Kurvenintervall==4] period=M refresh=600
+   
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=24Std, 3=Woche, 4=Monat]
+				}	
+			}
+		}
+
+		Text item=owmUrshultUebersicht {
+			Frame label="Open Weather Map - Urshult"{ 
+			
+				Text item=Urshult_Temperature {
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=24Std, 3=Woche, 4=Monat]
+					Chart item=Urshult_Temperature visibility=[Kurvenintervall==1] period=h refresh=600
+					Chart item=Urshult_Temperature visibility=[Kurvenintervall==2] period=d refresh=600
+					Chart item=Urshult_Temperature visibility=[Kurvenintervall==3] period=W refresh=600
+					Chart item=Urshult_Temperature visibility=[Kurvenintervall==4] period=M refresh=600
+				}    
+
+				Text item=Urshult_Pressure {
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=24Std, 3=Woche, 4=Monat]
+					Chart item=Urshult_Pressure visibility=[Kurvenintervall==1] period=h refresh=600
+					Chart item=Urshult_Pressure visibility=[Kurvenintervall==2] period=d refresh=600
+					Chart item=Urshult_Pressure visibility=[Kurvenintervall==3] period=W refresh=600
+					Chart item=Urshult_Pressure visibility=[Kurvenintervall==4] period=M refresh=600
+				}      
+	        	Text item=owmUrshultLuftdruckTrend
+				Text item=owmUrshultFeuchte icon="selfWater"
+								
+	        	Text item=owmUrshultWindgeschwindigkeit icon="wind"
+	        	Text item=owmUrshultWindrichtung icon="wind"
+				
+	        	Text item=owmUrshultWolken
+	        	Text item=owmUrshultWindgrad icon="wind"
+				
+
+	        	Text item=owmUrshultRegen icon="rain"
+	        	Text item=owmUrshultSchnee							
+			}	
+	
+		
+			Frame label="Urshult Wetterverlauf" {
+				Text label="Historische Daten"  icon="line" {
+		
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=24Std, 3=Woche, 4=Monat]
+					
+					Chart item=Urshult_Temperature visibility=[Kurvenintervall==1] period=h refresh=600
+					Chart item=Urshult_Temperature visibility=[Kurvenintervall==2] period=d refresh=600
+					Chart item=Urshult_Temperature visibility=[Kurvenintervall==3] period=W refresh=600
+					Chart item=Urshult_Temperature visibility=[Kurvenintervall==4] period=M refresh=600
+
+					Chart item=Urshult_Pressure visibility=[Kurvenintervall==1] period=h refresh=600
+					Chart item=Urshult_Pressure visibility=[Kurvenintervall==2] period=d refresh=600
+					Chart item=Urshult_Pressure visibility=[Kurvenintervall==3] period=W refresh=600
+					Chart item=Urshult_Pressure visibility=[Kurvenintervall==4] period=M refresh=600
+
+					Chart item=Urshult_Humidity visibility=[Kurvenintervall==1] period=h refresh=600
+					Chart item=Urshult_Humidity visibility=[Kurvenintervall==2] period=d refresh=600
+					Chart item=Urshult_Humidity visibility=[Kurvenintervall==3] period=W refresh=600
+					Chart item=Urshult_Humidity visibility=[Kurvenintervall==4] period=M refresh=600
+
+					Chart item=Urshult_Windspeed visibility=[Kurvenintervall==1] period=h refresh=600
+					Chart item=Urshult_Windspeed visibility=[Kurvenintervall==2] period=d refresh=600
+					Chart item=Urshult_Windspeed visibility=[Kurvenintervall==3] period=W refresh=600
+					Chart item=Urshult_Windspeed visibility=[Kurvenintervall==4] period=M refresh=600
+   
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=24Std, 3=Woche, 4=Monat]
+				}	
+			}
+		}		
+		
+	}
+
+	
+	Frame label="Temperaturen im Haus" icon="temperature" {
+
+		Text item=TempTreppe1
+		Text item=TempTreppe2
+		
+		
+		Text item=TempWohnzimmer 
+		Text item=kon5_Temp
+
+		Text label="Details" icon="none" {
+			Frame label="Details" {
+				Text item=HUEtemp1
+				Text item=HUEtemp2
+				
+				Text item=TempTreppe1
+				Text item=TempTreppe2
+
+				Text item=HUEoffset2
+				Text item=EYEoffset3
+
+				Text item=fibEye1_Temp
+				Text item=TempWohnzimmer 
+				
+				Text item=sen1_Temp1
+				Text item=sen1_Temp4
+			}
+		}
+		
+		Text icon="none"	
+	
+		Text item=TempTreppe1  icon="line" label="Temp Treppenhaus Verlauf" {
+			Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+			
+			Chart item=gTempTP visibility=[Kurvenintervall==1] period=h refresh=15000
+			Chart item=gTempTP visibility=[Kurvenintervall==2] period=4h refresh=15000
+			Chart item=gTempTP visibility=[Kurvenintervall==3] period=8h refresh=15000
+			Chart item=gTempTP visibility=[Kurvenintervall==4] period=12h refresh=15000
+			Chart item=gTempTP visibility=[Kurvenintervall==5] period=D refresh=15000
+			Chart item=gTempTP visibility=[Kurvenintervall==6] period=3D refresh=15000
+			Chart item=gTempTP visibility=[Kurvenintervall==7] period=W refresh=15000
+			Chart item=gTempTP visibility=[Kurvenintervall==8] period=2W refresh=15000
+			Chart item=gTempTP visibility=[Kurvenintervall==9] period=M refresh=15000
+			Chart item=gTempTP visibility=[Kurvenintervall==10] period=2M refresh=15000
+			Chart item=gTempTP visibility=[Kurvenintervall==11] period=4M refresh=15000
+			Chart item=gTempTP visibility=[Kurvenintervall==12] period=Y refresh=15000
+		}
+		
+		Text item=TempWohnzimmer icon="line" label="Temp Wohnzimmer Verlauf" {
+			Switch item=Kurvenintervall  mappings=[1=1h, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+			
+			Chart item=gTempWZ visibility=[Kurvenintervall==1] period=h refresh=15000
+			Chart item=gTempWZ visibility=[Kurvenintervall==2] period=4h refresh=15000
+			Chart item=gTempWZ visibility=[Kurvenintervall==3] period=8h refresh=15000
+			Chart item=gTempWZ visibility=[Kurvenintervall==4] period=12h refresh=15000
+			Chart item=gTempWZ visibility=[Kurvenintervall==5] period=D refresh=15000
+			Chart item=gTempWZ visibility=[Kurvenintervall==6] period=3D refresh=15000
+			Chart item=gTempWZ visibility=[Kurvenintervall==7] period=W refresh=15000
+			Chart item=gTempWZ visibility=[Kurvenintervall==8] period=2W refresh=15000
+			Chart item=gTempWZ visibility=[Kurvenintervall==9] period=M refresh=15000
+			Chart item=gTempWZ visibility=[Kurvenintervall==10] period=2M refresh=15000
+			Chart item=gTempWZ visibility=[Kurvenintervall==11] period=4M refresh=15000
+			Chart item=gTempWZ visibility=[Kurvenintervall==12] period=Y refresh=15000
+		}
+		
+		Text item=sen1_Temp4 icon="line" label="Temp Heizung Verlauf" {
+			Switch item=Kurvenintervall  mappings=[1=1h, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+		
+			Chart item=gTempHZ visibility=[Kurvenintervall==1] period=h refresh=15000
+			Chart item=gTempHZ visibility=[Kurvenintervall==2] period=4h refresh=15000
+			Chart item=gTempHZ visibility=[Kurvenintervall==3] period=8h refresh=15000
+			Chart item=gTempHZ visibility=[Kurvenintervall==4] period=12h refresh=15000
+			Chart item=gTempHZ visibility=[Kurvenintervall==5] period=D refresh=15000
+			Chart item=gTempHZ visibility=[Kurvenintervall==6] period=3D refresh=15000
+			Chart item=gTempHZ visibility=[Kurvenintervall==7] period=W refresh=15000
+			Chart item=gTempHZ visibility=[Kurvenintervall==8] period=2W refresh=15000
+			Chart item=gTempHZ visibility=[Kurvenintervall==9] period=M refresh=15000
+			Chart item=gTempHZ visibility=[Kurvenintervall==10] period=2M refresh=15000
+			Chart item=gTempHZ visibility=[Kurvenintervall==11] period=4M refresh=15000
+			Chart item=gTempHZ visibility=[Kurvenintervall==12] period=Y refresh=15000
+		}
+
+ 	}
+	
+	
+	Frame label="Geräte-Details" {
+		Text label="HUE Sensoren" icon="motion"  visibility=[swExpertenmodus == ON] {
+			Frame label="HUE Sensoren" visibility=[swExpertenmodus == ON] {
+										
+				Text item=HUE1_Temp
+				Text item=HUE2_Temp
+				
+				Text item=HUE1_Lux
+				Text item=HUE2_Lux
+				
+				Text item=HUE1_Move
+				Text item=HUE2_Move
+
+				Text item=HUE1_Battery		labelcolor=[<15="red"]	valuecolor=[<15="red"] // "black"
+				{ // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=HUE1_Battery visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=HUE1_Battery visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=HUE1_Battery visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=HUE1_Battery visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=HUE1_Battery visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=HUE1_Battery visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=HUE1_Battery visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=HUE1_Battery visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=HUE1_Battery visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=HUE1_Battery visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=HUE1_Battery visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=HUE1_Battery visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+
+				Text item=HUE2_Battery		labelcolor=[<15="red"]	valuecolor=[<15="red"]
+				{ // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=HUE2_Battery visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=HUE2_Battery visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=HUE2_Battery visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=HUE2_Battery visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=HUE2_Battery visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=HUE2_Battery visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=HUE2_Battery visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=HUE2_Battery visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=HUE2_Battery visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=HUE2_Battery visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=HUE2_Battery visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=HUE2_Battery visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+				
+				Text item=HUEtemp1
+				Text item=HUEtemp2
+
+				Text item=TempTreppe1
+				Text item=TempTreppe2
+
+				Text 						icon="none"
+				Text item=HUEoffset2
+				
+				//Text HUE_stat
+										
+										
+			}	
+		}
+		
+		Text label="FGMS001 Motion Sensoren"  icon="motion"  visibility=[swExpertenmodus == ON] {
+			Frame label="FGMS001 Motion Sensor 1 Wohnzimmer"  visibility=[swExpertenmodus == ON] {
+			
+				Text item=fibEye1_Temp
+				{ // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye1_Temp visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye1_Temp visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye1_Temp visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye1_Temp visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye1_Temp visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye1_Temp visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye1_Temp visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye1_Temp visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye1_Temp visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye1_Temp visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye1_Temp visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye1_Temp visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+				
+				Text item=fibEye1_Lux           
+			
+				Text item=fibEye1_Alarm
+				Text item=fibEye1_Motion
+				
+				Switch item=fibEye1_Alarm
+				Switch item=fibEye1_Motion
+				
+				Switch item=BewegungWZ
+				Text 								icon="none"
+
+				Text item=fibEye1_Signal
+				Text item=fibEye1_Tamper
+
+				Text item=fibEye1_Seismic				
+				Text item=fibEye1_Battery		labelcolor=[<15="red"]	valuecolor=[<15="red"]
+				{ // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye1_Battery visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye1_Battery visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye1_Battery visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye1_Battery visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye1_Battery visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye1_Battery visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye1_Battery visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye1_Battery visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye1_Battery visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye1_Battery visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye1_Battery visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye1_Battery visibility=[Kurvenintervall==12] period=Y refresh=15000
+				}
+			}
+			
+			/*---------*/
+			
+			Frame label="FGMS001 Motion Sensor 2 Terasse"  visibility=[swExpertenmodus == ON] {
+			
+				Text item=fibEye2_Temp
+				{ // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye2_Temp visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye2_Temp visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye2_Temp visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye2_Temp visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye2_Temp visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye2_Temp visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye2_Temp visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye2_Temp visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye2_Temp visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye2_Temp visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye2_Temp visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye2_Temp visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+				
+				Text item=fibEye2_Lux           
+			
+				Text item=fibEye2_Alarm
+				Text item=fibEye2_Motion
+				
+				Switch item=fibEye2_Alarm
+				Switch item=fibEye2_Motion
+				
+				Text item=fibEye2_Signal
+				Text item=fibEye2_Tamper
+
+				Text item=fibEye2_Seismic				
+				Text item=fibEye2_Battery		labelcolor=[<15="red"]	valuecolor=[<15="red"]
+				{ // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye2_Battery visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye2_Battery visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye2_Battery visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye2_Battery visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye2_Battery visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye2_Battery visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye2_Battery visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye2_Battery visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye2_Battery visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye2_Battery visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye2_Battery visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye2_Battery visibility=[Kurvenintervall==12] period=Y refresh=15000
+				}
+			}
+
+			/*---------*/
+			
+			Frame label="FGMS001 Motion Sensor 3 Osten"  visibility=[swExpertenmodus == ON] {
+			
+				Text item=fibEye3_Temp
+				{ // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye3_Temp visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye3_Temp visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye3_Temp visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye3_Temp visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye3_Temp visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye3_Temp visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye3_Temp visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye3_Temp visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye3_Temp visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye3_Temp visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye3_Temp visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye3_Temp visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 				
+				
+				
+				Text item=fibEye3_Lux           
+			
+				Text item=fibEye3_Alarm
+				Text item=fibEye3_Motion
+				
+				Switch item=fibEye3_Alarm
+				Switch item=fibEye3_Motion
+				
+				Text item=fibEye3_Signal
+				Text item=fibEye3_Tamper
+
+				Text item=fibEye3_Seismic				
+				Text item=fibEye3_Battery		labelcolor=[<15="red"]	valuecolor=[<15="red"]
+				{ // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye3_Battery visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye3_Battery visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye3_Battery visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye3_Battery visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye3_Battery visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye3_Battery visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye3_Battery visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye3_Battery visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye3_Battery visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye3_Battery visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye3_Battery visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye3_Battery visibility=[Kurvenintervall==12] period=Y refresh=15000
+				}
+			}
+
+			Frame label="FGMS001 Motion Sensor 4 Keller"  visibility=[swExpertenmodus == ON] {
+			
+				Text item=fibEye4_Temp
+				{ // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye4_Temp visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye4_Temp visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye4_Temp visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye4_Temp visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye4_Temp visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye4_Temp visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye4_Temp visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye4_Temp visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye4_Temp visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye4_Temp visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye4_Temp visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye4_Temp visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 				
+				Text item=fibEye4_Lux           
+			
+				Text item=fibEye4_Alarm
+				Text item=fibEye4_Motion
+				
+				Switch item=fibEye4_Alarm
+				Switch item=fibEye4_Motion
+				
+				Text item=fibEye4_Signal
+				Text item=fibEye4_Tamper
+
+				Text item=fibEye4_Seismic				
+				Text item=fibEye4_Battery		labelcolor=[<15="red"]	valuecolor=[<15="red"]
+				{ // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye4_Battery visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye4_Battery visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye4_Battery visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye4_Battery visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye4_Battery visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye4_Battery visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye4_Battery visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye4_Battery visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye4_Battery visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye4_Battery visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye4_Battery visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye4_Battery visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 				
+			}
+			Frame label="FGMS001 Motion Sensor 5 Flur"  visibility=[swExpertenmodus == ON] {
+			
+				Text item=fibEye5_Temp
+				{ // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye5_Temp visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye5_Temp visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye5_Temp visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye5_Temp visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye5_Temp visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye5_Temp visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye5_Temp visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye5_Temp visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye5_Temp visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye5_Temp visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye5_Temp visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye5_Temp visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 				
+				
+				
+				Text item=fibEye5_Lux           
+			
+				Text item=fibEye5_Alarm
+				Text item=fibEye5_Motion
+				
+				Switch item=fibEye5_Alarm
+				Switch item=fibEye5_Motion
+				
+				Text item=fibEye5_Signal
+				Text item=fibEye5_Tamper
+
+				Text item=fibEye5_Seismic				
+				Text item=fibEye5_Battery		labelcolor=[<15="red"]	valuecolor=[<15="red"]
+				{ // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye5_Battery visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye5_Battery visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye5_Battery visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye5_Battery visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye5_Battery visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye5_Battery visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye5_Battery visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye5_Battery visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye5_Battery visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye5_Battery visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye5_Battery visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye5_Battery visibility=[Kurvenintervall==12] period=Y refresh=15000
+				}
+			}
+
+			
+			Frame label="FGMS001 Motion Sensor 1 Kurven"  visibility=[swExpertenmodus == ON] {
+
+				Text item=fibEye1_Temp icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye1_Temp visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye1_Temp visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye1_Temp visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye1_Temp visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye1_Temp visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye1_Temp visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye1_Temp visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye1_Temp visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye1_Temp visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye1_Temp visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye1_Temp visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye1_Temp visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+					
+				Text item=fibEye1_Lux icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye1_Lux visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye1_Lux visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye1_Lux visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye1_Lux visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye1_Lux visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye1_Lux visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye1_Lux visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye1_Lux visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye1_Lux visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye1_Lux visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye1_Lux visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye1_Lux visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+				
+				Text item=fibEye1_Motion icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye1_Motion visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye1_Motion visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye1_Motion visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye1_Motion visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye1_Motion visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye1_Motion visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye1_Motion visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye1_Motion visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye1_Motion visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye1_Motion visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye1_Motion visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye1_Motion visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+				
+				Text item=fibEye1_Tamper icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye1_Tamper visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye1_Tamper visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye1_Tamper visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye1_Tamper visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye1_Tamper visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye1_Tamper visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye1_Tamper visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye1_Tamper visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye1_Tamper visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye1_Tamper visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye1_Tamper visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye1_Tamper visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+
+				Text item=fibEye1_Seismic icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye1_Seismic visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye1_Seismic visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye1_Seismic visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye1_Seismic visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye1_Seismic visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye1_Seismic visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye1_Seismic visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye1_Seismic visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye1_Seismic visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye1_Seismic visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye1_Seismic visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye1_Seismic visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+				
+				Text item=fibEye1_Battery icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye1_Battery visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye1_Battery visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye1_Battery visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye1_Battery visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye1_Battery visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye1_Battery visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye1_Battery visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye1_Battery visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye1_Battery visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye1_Battery visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye1_Battery visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye1_Battery visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+			}	
+			
+			
+			Frame label="FGMS001 Motion Sensor 2 Kurven"  visibility=[swExpertenmodus == ON] {
+
+				Text item=fibEye2_Temp icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye2_Temp visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye2_Temp visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye2_Temp visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye2_Temp visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye2_Temp visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye2_Temp visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye2_Temp visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye2_Temp visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye2_Temp visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye2_Temp visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye2_Temp visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye2_Temp visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+					
+				Text item=fibEye2_Lux icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye2_Lux visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye2_Lux visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye2_Lux visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye2_Lux visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye2_Lux visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye2_Lux visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye2_Lux visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye2_Lux visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye2_Lux visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye2_Lux visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye2_Lux visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye2_Lux visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+				
+				Text item=fibEye2_Motion icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye2_Motion visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye2_Motion visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye2_Motion visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye2_Motion visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye2_Motion visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye2_Motion visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye2_Motion visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye2_Motion visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye2_Motion visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye2_Motion visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye2_Motion visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye2_Motion visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+				
+				Text item=fibEye2_Tamper icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye2_Tamper visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye2_Tamper visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye2_Tamper visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye2_Tamper visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye2_Tamper visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye2_Tamper visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye2_Tamper visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye2_Tamper visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye2_Tamper visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye2_Tamper visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye2_Tamper visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye2_Tamper visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+
+				Text item=fibEye2_Seismic icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye2_Seismic visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye2_Seismic visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye2_Seismic visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye2_Seismic visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye2_Seismic visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye2_Seismic visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye2_Seismic visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye2_Seismic visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye2_Seismic visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye2_Seismic visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye2_Seismic visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye2_Seismic visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+				
+				Text item=fibEye2_Battery icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye2_Battery visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye2_Battery visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye2_Battery visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye2_Battery visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye2_Battery visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye2_Battery visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye2_Battery visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye2_Battery visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye2_Battery visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye2_Battery visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye2_Battery visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye2_Battery visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+			}	
+			
+		
+		
+			Frame label="FGMS001 Motion Sensor 3 Kurven"  visibility=[swExpertenmodus == ON] {
+
+				Text item=fibEye3_Temp icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye3_Temp visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye3_Temp visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye3_Temp visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye3_Temp visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye3_Temp visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye3_Temp visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye3_Temp visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye3_Temp visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye3_Temp visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye3_Temp visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye3_Temp visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye3_Temp visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+					
+				Text item=fibEye3_Lux icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye3_Lux visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye3_Lux visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye3_Lux visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye3_Lux visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye3_Lux visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye3_Lux visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye3_Lux visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye3_Lux visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye3_Lux visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye3_Lux visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye3_Lux visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye3_Lux visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+				
+				Text item=fibEye3_Motion icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye3_Motion visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye3_Motion visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye3_Motion visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye3_Motion visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye3_Motion visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye3_Motion visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye3_Motion visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye3_Motion visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye3_Motion visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye3_Motion visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye3_Motion visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye3_Motion visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+				
+				Text item=fibEye3_Tamper icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye3_Tamper visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye3_Tamper visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye3_Tamper visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye3_Tamper visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye3_Tamper visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye3_Tamper visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye3_Tamper visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye3_Tamper visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye3_Tamper visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye3_Tamper visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye3_Tamper visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye3_Tamper visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+
+				Text item=fibEye3_Seismic icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye3_Seismic visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye3_Seismic visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye3_Seismic visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye3_Seismic visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye3_Seismic visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye3_Seismic visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye3_Seismic visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye3_Seismic visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye3_Seismic visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye3_Seismic visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye3_Seismic visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye3_Seismic visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+				
+				Text item=fibEye3_Battery icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye3_Battery visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye3_Battery visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye3_Battery visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye3_Battery visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye3_Battery visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye3_Battery visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye3_Battery visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye3_Battery visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye3_Battery visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye3_Battery visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye3_Battery visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye3_Battery visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+			}	
+	
+
+			Frame label="FGMS001 Motion Sensor 4 Kurven"  visibility=[swExpertenmodus == ON] {
+
+				Text item=fibEye4_Temp icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye4_Temp visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye4_Temp visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye4_Temp visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye4_Temp visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye4_Temp visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye4_Temp visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye4_Temp visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye4_Temp visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye4_Temp visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye4_Temp visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye4_Temp visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye4_Temp visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+					
+				Text item=fibEye4_Lux icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye4_Lux visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye4_Lux visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye4_Lux visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye4_Lux visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye4_Lux visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye4_Lux visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye4_Lux visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye4_Lux visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye4_Lux visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye4_Lux visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye4_Lux visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye4_Lux visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+				
+				Text item=fibEye4_Motion icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye4_Motion visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye4_Motion visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye4_Motion visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye4_Motion visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye4_Motion visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye4_Motion visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye4_Motion visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye4_Motion visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye4_Motion visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye4_Motion visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye4_Motion visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye4_Motion visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+				
+				Text item=fibEye4_Tamper icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye4_Tamper visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye4_Tamper visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye4_Tamper visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye4_Tamper visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye4_Tamper visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye4_Tamper visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye4_Tamper visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye4_Tamper visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye4_Tamper visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye4_Tamper visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye4_Tamper visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye4_Tamper visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+
+				Text item=fibEye4_Seismic icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye4_Seismic visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye4_Seismic visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye4_Seismic visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye4_Seismic visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye4_Seismic visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye4_Seismic visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye4_Seismic visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye4_Seismic visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye4_Seismic visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye4_Seismic visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye4_Seismic visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye4_Seismic visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+				
+				Text item=fibEye4_Battery icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye4_Battery visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye4_Battery visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye4_Battery visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye4_Battery visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye4_Battery visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye4_Battery visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye4_Battery visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye4_Battery visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye4_Battery visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye4_Battery visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye4_Battery visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye4_Battery visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+			}	
+		
+		
+			Frame label="FGMS001 Motion Sensor 5 Kurven"  visibility=[swExpertenmodus == ON] {
+
+				Text item=fibEye5_Temp icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye5_Temp visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye5_Temp visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye5_Temp visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye5_Temp visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye5_Temp visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye5_Temp visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye5_Temp visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye5_Temp visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye5_Temp visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye5_Temp visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye5_Temp visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye5_Temp visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+					
+				Text item=fibEye5_Lux icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye5_Lux visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye5_Lux visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye5_Lux visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye5_Lux visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye5_Lux visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye5_Lux visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye5_Lux visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye5_Lux visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye5_Lux visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye5_Lux visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye5_Lux visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye5_Lux visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+				
+				Text item=fibEye5_Motion icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye5_Motion visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye5_Motion visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye5_Motion visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye5_Motion visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye5_Motion visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye5_Motion visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye5_Motion visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye5_Motion visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye5_Motion visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye5_Motion visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye5_Motion visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye5_Motion visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+				
+				Text item=fibEye5_Tamper icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye5_Tamper visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye5_Tamper visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye5_Tamper visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye5_Tamper visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye5_Tamper visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye5_Tamper visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye5_Tamper visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye5_Tamper visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye5_Tamper visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye5_Tamper visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye5_Tamper visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye5_Tamper visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+
+				Text item=fibEye5_Seismic icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye5_Seismic visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye5_Seismic visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye5_Seismic visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye5_Seismic visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye5_Seismic visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye5_Seismic visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye5_Seismic visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye5_Seismic visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye5_Seismic visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye5_Seismic visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye5_Seismic visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye5_Seismic visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+				
+				Text item=fibEye5_Battery icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye5_Battery visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye5_Battery visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye5_Battery visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye5_Battery visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye5_Battery visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye5_Battery visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye5_Battery visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye5_Battery visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye5_Battery visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye5_Battery visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye5_Battery visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye5_Battery visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+			}	
+
+		
+			Frame label="FGMS001 Motion Sensor 6 Kurven"  visibility=[swExpertenmodus == ON] {
+
+				Text item=fibEye6_Temp icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye6_Temp visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye6_Temp visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye6_Temp visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye6_Temp visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye6_Temp visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye6_Temp visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye6_Temp visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye6_Temp visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye6_Temp visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye6_Temp visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye6_Temp visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye6_Temp visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+					
+				Text item=fibEye6_Lux icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye6_Lux visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye6_Lux visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye6_Lux visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye6_Lux visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye6_Lux visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye6_Lux visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye6_Lux visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye6_Lux visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye6_Lux visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye6_Lux visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye6_Lux visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye6_Lux visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+				
+				Text item=fibEye6_Motion icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye6_Motion visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye6_Motion visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye6_Motion visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye6_Motion visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye6_Motion visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye6_Motion visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye6_Motion visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye6_Motion visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye6_Motion visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye6_Motion visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye6_Motion visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye6_Motion visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+				
+				Text item=fibEye6_Tamper icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye6_Tamper visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye6_Tamper visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye6_Tamper visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye6_Tamper visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye6_Tamper visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye6_Tamper visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye6_Tamper visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye6_Tamper visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye6_Tamper visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye6_Tamper visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye6_Tamper visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye6_Tamper visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+
+				Text item=fibEye6_Seismic icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye6_Seismic visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye6_Seismic visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye6_Seismic visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye6_Seismic visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye6_Seismic visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye6_Seismic visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye6_Seismic visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye6_Seismic visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye6_Seismic visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye6_Seismic visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye6_Seismic visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye6_Seismic visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+				
+				Text item=fibEye6_Battery icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibEye6_Battery visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibEye6_Battery visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibEye6_Battery visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibEye6_Battery visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibEye6_Battery visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibEye6_Battery visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibEye6_Battery visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibEye6_Battery visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibEye6_Battery visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibEye6_Battery visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibEye6_Battery visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibEye6_Battery visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+			}		
+		}	
+
+
+		Text label="Fibaro Universal Sensoren" icon="line"  visibility=[swExpertenmodus == ON] {
+			Frame label="Fibaro Universal Sensor 1" visibility=[swExpertenmodus == ON] {
+										
+				Text item=sen1_Kontakt1
+				Text item=sen1_Kontakt2
+				
+				Text item=sen1_Temp1
+				Text item=sen1_Temp2
+				
+				Text item=sen1_Temp3
+				Text item=sen1_Temp4										
+			}	
+			
+			Frame label="Fibaro Universal Sensor 2" visibility=[swExpertenmodus == ON] {
+										
+				Text item=sen2_Kontakt1
+				Text item=sen2_Kontakt2
+				
+				Text item=sen2_Temp1
+				Text item=sen2_Temp2
+				
+				Text item=sen2_Temp3
+				Text item=sen2_Temp4									
+			}				
+		}
+
+		
+		Text label="FGFS101 Flood Sensor"  icon="water"  visibility=[swExpertenmodus == ON] {
+			Frame label="FGFS101 Flood Sensor 1 Küche"  visibility=[swExpertenmodus == ON] {
+			
+				Text item=fibFlood1_Water           
+				Text item=fibFlood1_Sensor
+				
+				Text item=fibFlood1_Alarm
+				Switch item=fibFlood1_Tamper
+				
+				Switch item=fibFlood1_Burglar
+				Text 							icon="none"
+				
+				Text item=fibFlood1_Temp
+				{ // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibFlood1_Temp visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibFlood1_Temp visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibFlood1_Temp visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibFlood1_Temp visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibFlood1_Temp visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibFlood1_Temp visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibFlood1_Temp visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibFlood1_Temp visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibFlood1_Temp visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibFlood1_Temp visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibFlood1_Temp visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibFlood1_Temp visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+								
+				Text item=fibFlood1_Battery		labelcolor=[<15="red"]	valuecolor=[<15="red"]
+				{ // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibFlood1_Battery visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibFlood1_Battery visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibFlood1_Battery visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibFlood1_Battery visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibFlood1_Battery visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibFlood1_Battery visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibFlood1_Battery visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibFlood1_Battery visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibFlood1_Battery visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibFlood1_Battery visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibFlood1_Battery visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibFlood1_Battery visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+			}
+			
+			
+			Frame label="FGFS101 Flood Sensor 2 Heizungskeller"  visibility=[swExpertenmodus == ON] {
+			
+				Text item=fibFlood2_Water           
+				Text item=fibFlood2_Sensor
+				
+				Text item=fibFlood2_Alarm
+				Switch item=fibFlood2_Tamper
+				
+				Switch item=fibFlood2_Burglar
+				Text 							icon="none"
+				
+				Text item=fibFlood2_Temp
+				{ // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibFlood2_Temp visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibFlood2_Temp visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibFlood2_Temp visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibFlood2_Temp visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibFlood2_Temp visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibFlood2_Temp visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibFlood2_Temp visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibFlood2_Temp visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibFlood2_Temp visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibFlood2_Temp visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibFlood2_Temp visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibFlood2_Temp visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 				
+								
+				Text item=fibFlood2_Battery		labelcolor=[<15="red"]	valuecolor=[<15="red"]
+				{ // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=fibFlood2_Battery visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=fibFlood2_Battery visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=fibFlood2_Battery visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=fibFlood2_Battery visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=fibFlood2_Battery visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=fibFlood2_Battery visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=fibFlood2_Battery visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=fibFlood2_Battery visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=fibFlood2_Battery visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=fibFlood2_Battery visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=fibFlood2_Battery visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=fibFlood2_Battery visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+			}
+		}
+			
+
+		
+		Text label="FGS22x Switch 2 x 1,5kW" icon="switch" visibility=[swExpertenmodus == ON] {
+			Frame label="FGS222 Switch1 Wohnzimmer"  visibility=[swExpertenmodus == ON] {
+			
+				Switch item=swi1_Switch1
+				Switch item=swi1_Switch2
+				Switch item=swi1_Switch				
+			}	
+			
+			Frame label="FGS223 Switch2 Flur"  visibility=[swExpertenmodus == ON] {
+			
+				Switch item=swi2_Switch1
+				Switch item=swi2_Switch2
+				Switch item=swi2_Switch	
+				Text 						icon="none"
+	
+				Text  	item=swi2_Energy1            
+				Text  	item=swi2_Energy2            
+				Text  	item=swi2_Energy           
+				Text 						icon="none"
+				
+				Text  	item=swi2_Watt1            	
+				Text  	item=swi2_Watt2         	   	
+				Text  	item=swi2_Watt            	
+				Text 						icon="none"
+
+				Switch  item=swi2_Alarm 				
+				Text  	item=swi2_Scene         	   	     										
+			
+			}	
+			
+			Frame label="FGS223 Switch3 Vorflur"  visibility=[swExpertenmodus == ON] {
+			
+				Switch item=swi3_Switch1
+				Switch item=swi3_Switch2
+				Switch item=swi3_Switch	
+				Text 						icon="none"
+	
+				Text  	item=swi3_Energy1            
+				Text  	item=swi3_Energy2            
+				Text  	item=swi3_Energy           
+				Text 						icon="none"
+				
+				Text  	item=swi3_Watt1            	
+				Text  	item=swi3_Watt2         	   	
+				Text  	item=swi3_Watt            	
+				Text 						icon="none"
+
+				Switch  item=swi3_Alarm 				
+				Text  	item=swi3_Scene         	   	     										
+				
+			}	
+		}
+		
+		
+		Text label="FGRGBW RGBW Controller" icon="colorwheel"  visibility=[swExpertenmodus == ON] {
+		Frame label="FGRGBW RGBW Controller" visibility=[swExpertenmodus == ON] {
+									
+			
+			//Text icon="none"
+
+			Frame label="FGRGBW RGBW Controller 1 (Treppenhaus)" visibility=[swExpertenmodus == ON] {
+				
+				Slider 		item=rgbw1_Dimmer 	label="Strip Treppe [%d %%]"
+				Slider 		item=rgbw1_RED 		label="Strip Treppe RED   [%s %%]"
+				Colorpicker item=rgbw1_Color	label="Strip Treppe Farbe [%d %%]" 				
+				Slider 		item=rgbw1_GREEN 	label="Strip Treppe GREEN [%.0f %%]"
+				Switch		item=rgbw1_Color	label="Strip Treppe Ein/aus" 				
+				Slider 		item=rgbw1_BLUE		label="Strip Treppe BLUE  [%d %%]"
+				Text 								icon="none"
+				Slider 		item=rgbw1_WHITE	label="Strip Treppe WHITE [%d %%]"
+
+				Switch 		item=swDetails		label="Energiewerte anzeigen"
+				
+				Text item=rgbw1_Power 		 visibility=[swDetails == ON]
+				Text item=rgbw1_Energy 		 visibility=[swDetails == ON]		
+				Text item=rgbw1_Watt 		 visibility=[swDetails == ON]
+			}
+			
+			Frame label="FGRGBW RGBW Controller 2 (Bastelkeller)" visibility=[swExpertenmodus == ON] {
+				
+				Slider 		item=rgbw2_Dimmer 	label="Strip Bastelkeller [%d %%]"
+				Slider 		item=rgbw2_RED 		label="Strip Bastelkeller RED [%s %%]"
+				Colorpicker item=rgbw2_Color	label="Strip Treppe Farbe [%d %%]" 				
+				Slider 		item=rgbw2_GREEN 	label="Strip Vorratsraum GREEN [%.0f %%]"
+				Switch		item=rgbw2_Color	label="Strip Bastelkeller Ein/aus" 				
+				Slider 		item=rgbw2_BLUE		label="Strip BLUE Bastelkeller Band [%d %%]"
+				Text 								icon="none"
+				Slider 		item=rgbw2_WHITE	label="Strip WHITE Treppe [%d %%]"
+
+				Switch 		item=swDetails		label="Energiewerte anzeigen"
+				
+				Text item=rgbw2_Power 		 visibility=[swDetails == ON]
+				Text item=rgbw2_Energy 		 visibility=[swDetails == ON]		
+				Text item=rgbw2_Watt 		 visibility=[swDetails == ON]
+			}		
+		}
+		}
+		
+		Text label="FGR222 Roller Shutter " icon="rollershutter"  visibility=[swExpertenmodus == ON] {
+		Frame label="FGR222 Roller Shutter " visibility=[swExpertenmodus == ON] {
+									
+			Switch item=swRollladen_automatik
+			Switch item=swDetails
+			//Text icon="none"
+
+			//Text label="FGR222 Roller Shutter 1 " icon="switch"  visibility=[swExpertenmodus == ON] {
+			Frame label="FGR222 Roller Shutter 1 (Küche Norden)" visibility=[swExpertenmodus == ON] {
+				
+				//Switch item=rol1_Shutter 	label="Rollläden Küche   [(%d)]" mappings=[UP="Hoch", STOP="X", DOWN="Runter"]
+				//Switch item=rol1_Shutter	label="Rollläden Küche   [(%d)]" mappings=[UP="Hoch", 50="Halb", STOP="X", 85="Lüften", DOWN="Runter"]
+				//Selection item=rol1_Shutter label="Rollläden Küche   [(%d)]"	mappings=[UP="Hoch", 50="Halb", STOP="X", 85="Lüften", DOWN="Runter"]
+				//Text icon="none" 
+
+				Text item=rol1_Shutter 		label="Küche (Norden) [%d %%]"
+				Switch item=rol1_Shutter	label="[%d %%]" 					mappings=[UP="Hoch", 50="Halb", STOP="X", 68="Lüften", DOWN="Runter"]
+						
+				Text item=rol1_Power 		 visibility=[swDetails == ON]
+				Text item=rol1_Energy 		 visibility=[swDetails == ON]		
+				Text item=rol1_Watt 		 visibility=[swDetails == ON]
+			}
+			//}
+
+			Frame label="FGR222 Roller Shutter 2 (Küche Osten)" visibility=[swExpertenmodus == ON] {
+				
+				Text item=rol2_Shutter 		label="Küche (Osten) [%d %%]"
+				Switch item=rol2_Shutter	label="[%d %%]" 					mappings=[UP="Hoch", 50="Halb", STOP="X", 68="Lüften", DOWN="Runter"]
+							
+				Text item=rol2_Power 		 visibility=[swDetails == ON]
+				Text item=rol2_Energy 		 visibility=[swDetails == ON]
+				Text item=rol2_Watt 		 visibility=[swDetails == ON]
+			}	
+			
+			Frame label="FGR222 Roller Shutter 3 (Wohnzimmer Osten)" visibility=[swExpertenmodus == ON] {
+				
+				Text item=rol3_Shutter 		label="Wohnzimmer (Osten) [%d %%]"
+				Switch item=rol3_Shutter	label="[%d %%]" 					mappings=[UP="Hoch", 50="Halb", STOP="X", 68="Lüften", DOWN="Runter"]
+							
+				Text item=rol3_Power 		 visibility=[swDetails == ON]
+				Text item=rol3_Energy 		 visibility=[swDetails == ON]
+				Text item=rol3_Watt 		 visibility=[swDetails == ON]
+			}	
+			
+			
+			Frame label="FGR222 Roller Shutter 4 (Terasse links)" visibility=[swExpertenmodus == ON] {
+				
+				Text item=rol4_Shutter 		label="Wohnzimmer (links) [%d %%]"
+				Switch item=rol4_Shutter	label="[%d %%]" 					mappings=[UP="Hoch", 50="Halb", STOP="X", 75="Lüften", DOWN="Runter"]
+							
+				Text item=rol4_Power 		 visibility=[swDetails == ON]
+				Text item=rol4_Energy 		 visibility=[swDetails == ON]
+				Text item=rol4_Watt 		 visibility=[swDetails == ON]
+			}	
+			
+			Frame label="FGR222 Roller Shutter 5 (Terasse rechts)" visibility=[swExpertenmodus == ON] {
+				
+				Text item=rol5_Shutter 		label="Wohnzimmer (rechts) [%d %%]"
+				Switch item=rol5_Shutter	label="[%d %%]" 					mappings=[UP="Hoch", 50="Halb", STOP="X", 75="Lüften", DOWN="Runter"]
+				
+				Text item=rol5_Power 		 visibility=[swDetails == ON]
+				Text item=rol5_Energy 		 visibility=[swDetails == ON]
+				Text item=rol5_Watt 		 visibility=[swDetails == ON]
+			}
+			
+			Text item=gRoll icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+				Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+				Chart item=gRoll visibility=[Kurvenintervall==1] period=h refresh=15000
+				Chart item=gRoll visibility=[Kurvenintervall==2] period=4h refresh=15000
+				Chart item=gRoll visibility=[Kurvenintervall==3] period=8h refresh=15000
+				Chart item=gRoll visibility=[Kurvenintervall==4] period=12h refresh=15000
+				Chart item=gRoll visibility=[Kurvenintervall==5] period=D refresh=15000
+				Chart item=gRoll visibility=[Kurvenintervall==6] period=3D refresh=15000
+				Chart item=gRoll visibility=[Kurvenintervall==7] period=W refresh=15000
+				Chart item=gRoll visibility=[Kurvenintervall==8] period=2W refresh=15000
+				Chart item=gRoll visibility=[Kurvenintervall==9] period=M refresh=15000
+				Chart item=gRoll visibility=[Kurvenintervall==10] period=2M refresh=15000
+				Chart item=gRoll visibility=[Kurvenintervall==11] period=4M refresh=15000
+				Chart item=gRoll visibility=[Kurvenintervall==12] period=Y refresh=15000
+			}	
+			
+			Text item=gRoll_Kurve icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+				Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+				Chart item=gRoll_Kurve visibility=[Kurvenintervall==1] period=h refresh=15000
+				Chart item=gRoll_Kurve visibility=[Kurvenintervall==2] period=4h refresh=15000
+				Chart item=gRoll_Kurve visibility=[Kurvenintervall==3] period=8h refresh=15000
+				Chart item=gRoll_Kurve visibility=[Kurvenintervall==4] period=12h refresh=15000
+				Chart item=gRoll_Kurve visibility=[Kurvenintervall==5] period=D refresh=15000
+				Chart item=gRoll_Kurve visibility=[Kurvenintervall==6] period=3D refresh=15000
+				Chart item=gRoll_Kurve visibility=[Kurvenintervall==7] period=W refresh=15000
+				Chart item=gRoll_Kurve visibility=[Kurvenintervall==8] period=2W refresh=15000
+				Chart item=gRoll_Kurve visibility=[Kurvenintervall==9] period=M refresh=15000
+				Chart item=gRoll_Kurve visibility=[Kurvenintervall==10] period=2M refresh=15000
+				Chart item=gRoll_Kurve visibility=[Kurvenintervall==11] period=4M refresh=15000
+				Chart item=gRoll_Kurve visibility=[Kurvenintervall==12] period=Y refresh=15000
+			}	
+	
+		}	
+		}
+		
+		Text label="Steckdosen"  icon="poweroutlet" visibility=[swExpertenmodus == ON] {
+		//Frame label="Steckdosen" visibility=[swExpertenmodus == ON] {
+				
+			//Text label="GWPN1 Steckdose"  icon="line" visibility=[swExpertenmodus == ON] { 
+			Frame label="GWPN1 Steckdose" visibility=[swExpertenmodus == ON] {
+	
+				Switch  item=pwr1_Plug  
+
+				Text item=pwr1_Watt_akt icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=pwr1_Watt_akt visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=pwr1_Watt_akt visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=pwr1_Watt_akt visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=pwr1_Watt_akt visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=pwr1_Watt_akt visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=pwr1_Watt_akt visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=pwr1_Watt_akt visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=pwr1_Watt_akt visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=pwr1_Watt_akt visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=pwr1_Watt_akt visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=pwr1_Watt_akt visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=pwr1_Watt_akt visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+				
+  
+				Text item=pwr1_kWh
+ 				Text item=pwr1_kWh_day
+				Text item=pwr1_Cost_day	
+				
+				Text item=pwr1_kWh_yesterday
+ 				Text item=pwr1_Cost_yesterday
+				
+				Text item=pwr1_Cost_yesterday  {
+					Switch item=Kurvenintervall  mappings=[5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=pwr1_Cost_yesterday  visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=pwr1_Cost_yesterday  visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=pwr1_Cost_yesterday  visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=pwr1_Cost_yesterday  visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=pwr1_Cost_yesterday  visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=pwr1_Cost_yesterday  visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=pwr1_Cost_yesterday  visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=pwr1_Cost_yesterday  visibility=[Kurvenintervall==12] period=Y refresh=15000
+				}
+  
+ 
+				
+			}
+			//}
+		
+		
+			//Text label="Fibaro Steckdose 1"  icon="line" visibility=[swExpertenmodus == ON] { 
+			Frame label="Fibaro Steckdose 1" visibility=[swExpertenmodus == ON] {
+	
+				Switch  item=pwr2_Plug  
+
+				Text item=pwr2_Watt_akt icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=pwr2_Watt_akt visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=pwr2_Watt_akt visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=pwr2_Watt_akt visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=pwr2_Watt_akt visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=pwr2_Watt_akt visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=pwr2_Watt_akt visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=pwr2_Watt_akt visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=pwr2_Watt_akt visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=pwr2_Watt_akt visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=pwr2_Watt_akt visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=pwr2_Watt_akt visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=pwr2_Watt_akt visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+				
+  
+				Text item=pwr2_kWh
+ 				Text item=pwr2_kWh_day
+				Text item=pwr2_Cost_day	
+				
+				Text item=pwr2_kWh_yesterday
+ 				Text item=pwr2_Cost_yesterday
+				
+				Text item=pwr2_Cost_yesterday  {
+					Switch item=Kurvenintervall  mappings=[5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=pwr2_Cost_yesterday  visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=pwr2_Cost_yesterday  visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=pwr2_Cost_yesterday  visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=pwr2_Cost_yesterday  visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=pwr2_Cost_yesterday  visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=pwr2_Cost_yesterday  visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=pwr2_Cost_yesterday  visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=pwr2_Cost_yesterday  visibility=[Kurvenintervall==12] period=Y refresh=15000
+				}
+  
+			}
+			//}
+		
+		
+			//Text label="Fibaro Steckdose 2"  icon="line" visibility=[swExpertenmodus == ON] { 
+			Frame label="Fibaro Steckdose 2" visibility=[swExpertenmodus == ON] {
+	
+				Switch  item=pwr3_Plug  
+
+				Text item=pwr3_Watt_akt icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=pwr3_Watt_akt visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=pwr3_Watt_akt visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=pwr3_Watt_akt visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=pwr3_Watt_akt visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=pwr3_Watt_akt visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=pwr3_Watt_akt visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=pwr3_Watt_akt visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=pwr3_Watt_akt visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=pwr3_Watt_akt visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=pwr3_Watt_akt visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=pwr3_Watt_akt visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=pwr3_Watt_akt visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+				
+  
+				Text item=pwr3_kWh
+ 				Text item=pwr3_kWh_day
+				Text item=pwr3_Cost_day	
+				
+				Text item=pwr3_kWh_yesterday
+ 				Text item=pwr3_Cost_yesterday
+				
+				Text item=pwr3_Cost_yesterday  {
+					Switch item=Kurvenintervall  mappings=[5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=pwr3_Cost_yesterday  visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=pwr3_Cost_yesterday  visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=pwr3_Cost_yesterday  visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=pwr3_Cost_yesterday  visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=pwr3_Cost_yesterday  visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=pwr3_Cost_yesterday  visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=pwr3_Cost_yesterday  visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=pwr3_Cost_yesterday  visibility=[Kurvenintervall==12] period=Y refresh=15000
+				}
+				
+			}
+			//}
+			
+			
+		//}
+		}
+
+		Text label="Sensative Strips"  icon="switch" visibility=[swExpertenmodus == ON] { 
+			Frame label="Sensative Strip 1" visibility=[swExpertenmodus == ON] {
+				
+				Text item=kon1_Kontakt 
+				Text item=kon1_Alarm
+
+				Text item=kon1_Battery		labelcolor=[<15="red"]	valuecolor=[<15="red"]
+			}	
+		}
+		Text label="FGK101 Door Opening Sensoren"  icon="door" visibility=[swExpertenmodus == ON] { 
+			Frame label="FGK101 Door Opening Sensor 2 Küche" visibility=[swExpertenmodus == ON] {
+				
+				Text item=kon2_Kontakt 
+				Text item=kon2_Sensor
+
+				Text item=kon2_Alarm		
+				Text item=kon2_AlarmGen
+				
+				Text item=kon2_Temp labelcolor=[<15="red"]	valuecolor=[<15="red"] { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=kon2_Temp visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=kon2_Temp visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=kon2_Temp visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=kon2_Temp visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=kon2_Temp visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=kon2_Temp visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=kon2_Temp visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=kon2_Temp visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=kon2_Temp visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=kon2_Temp visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=kon2_Temp visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=kon2_Temp visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+				
+				Text item=kon2_Battery labelcolor=[<15="red"]	valuecolor=[<15="red"] { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=kon2_Battery visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=kon2_Battery visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=kon2_Battery visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=kon2_Battery visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=kon2_Battery visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=kon2_Battery visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=kon2_Battery visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=kon2_Battery visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=kon2_Battery visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=kon2_Battery visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=kon2_Battery visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=kon2_Battery visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+			}
+			
+			Frame label="FGK101 Door Opening Sensor 3 Terasse" visibility=[swExpertenmodus == ON] {
+				
+			    Text item=kon3_Kontakt 
+				Text item=kon3_Sensor
+
+				Text item=kon3_Alarm
+				Text item=kon3_AlarmGen
+			
+				Text item=kon3_Temp labelcolor=[<15="red"]	valuecolor=[<15="red"] { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=kon3_Temp visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=kon3_Temp visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=kon3_Temp visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=kon3_Temp visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=kon3_Temp visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=kon3_Temp visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=kon3_Temp visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=kon3_Temp visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=kon3_Temp visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=kon3_Temp visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=kon3_Temp visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=kon3_Temp visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+				
+				Text item=kon3_Battery labelcolor=[<15="red"]	valuecolor=[<15="red"] { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=kon3_Battery visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=kon3_Battery visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=kon3_Battery visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=kon3_Battery visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=kon3_Battery visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=kon3_Battery visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=kon3_Battery visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=kon3_Battery visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=kon3_Battery visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=kon3_Battery visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=kon3_Battery visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=kon3_Battery visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+			}	
+			
+			
+			Frame label="FGK101 Door Opening Sensor 4 Weiss" visibility=[swExpertenmodus == ON] {
+				
+			    Text item=kon4_Kontakt  //labelcolor=[ON="red"] valuecolor=[ON="red"]
+				Text item=kon4_Sensor	//labelcolor=[ON="red"] valuecolor=[ON="red"]
+
+				Text item=kon4_Alarm	//labelcolor=[ON="red"] valuecolor=[ON="red"]
+				Text item=kon4_AlarmGen	//labelcolor=[ON="red"] valuecolor=[ON="red"]
+				
+				Text item=kon4_Temp labelcolor=[<15="red"]	valuecolor=[<15="red"] { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=kon4_Temp visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=kon4_Temp visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=kon4_Temp visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=kon4_Temp visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=kon4_Temp visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=kon4_Temp visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=kon4_Temp visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=kon4_Temp visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=kon4_Temp visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=kon4_Temp visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=kon4_Temp visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=kon4_Temp visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+				
+				Text item=kon4_Battery labelcolor=[<15="red"]	valuecolor=[<15="red"] { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=kon4_Battery visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=kon4_Battery visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=kon4_Battery visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=kon4_Battery visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=kon4_Battery visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=kon4_Battery visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=kon4_Battery visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=kon4_Battery visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=kon4_Battery visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=kon4_Battery visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=kon4_Battery visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=kon4_Battery visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+			
+				Text						icon="none"
+				Text						icon="none"
+
+				Text item=cnt_Gaszaehler	icon="boiler_viessmann"
+				Switch item=kon4_Kontakt
+
+			}	
+			
+			Frame label="FGK101 Door Opening Sensor 5 Kellertür" visibility=[swExpertenmodus == ON] {
+				
+			    Text item=kon5_Kontakt 
+				Text item=kon5_Sensor	
+				
+				Text item=kon5_Alarm	
+				Text item=kon5_AlarmGen	
+
+				Text item=kon5_Temp labelcolor=[<15="red"]	valuecolor=[<15="red"] { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=kon5_Temp visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=kon5_Temp visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=kon5_Temp visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=kon5_Temp visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=kon5_Temp visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=kon5_Temp visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=kon5_Temp visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=kon5_Temp visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=kon5_Temp visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=kon5_Temp visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=kon5_Temp visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=kon5_Temp visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+				
+				Text item=kon5_Battery labelcolor=[<15="red"]	valuecolor=[<15="red"] { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=kon5_Battery visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=kon5_Battery visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=kon5_Battery visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=kon5_Battery visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=kon5_Battery visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=kon5_Battery visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=kon5_Battery visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=kon5_Battery visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=kon5_Battery visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=kon5_Battery visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=kon5_Battery visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=kon5_Battery visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+			}			
+
+			Frame label="FGK101 Door Opening Sensor 6 Haustür" visibility=[swExpertenmodus == ON] {
+				
+			    Text item=kon6_Kontakt 
+				Text item=kon6_Sensor
+
+				Text item=kon6_Temp	
+				Text item=kon6_Battery
+
+				Text item=kon6_AlarmTemp
+				Text item=kon6_AlarmAccess
+				Text item=kon6_AlarmBurglar
+				Text item=kon6_AlarmPower
+
+				Text item=kon6_Temp labelcolor=[<15="red"]	valuecolor=[<15="red"] { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=kon6_Temp visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=kon6_Temp visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=kon6_Temp visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=kon6_Temp visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=kon6_Temp visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=kon6_Temp visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=kon6_Temp visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=kon6_Temp visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=kon6_Temp visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=kon6_Temp visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=kon6_Temp visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=kon6_Temp visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+				
+				Text item=kon6_Battery labelcolor=[<15="red"]	valuecolor=[<15="red"] { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+					Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+					Chart item=kon6_Battery visibility=[Kurvenintervall==1] period=h refresh=15000
+					Chart item=kon6_Battery visibility=[Kurvenintervall==2] period=4h refresh=15000
+					Chart item=kon6_Battery visibility=[Kurvenintervall==3] period=8h refresh=15000
+					Chart item=kon6_Battery visibility=[Kurvenintervall==4] period=12h refresh=15000
+					Chart item=kon6_Battery visibility=[Kurvenintervall==5] period=D refresh=15000
+					Chart item=kon6_Battery visibility=[Kurvenintervall==6] period=3D refresh=15000
+					Chart item=kon6_Battery visibility=[Kurvenintervall==7] period=W refresh=15000
+					Chart item=kon6_Battery visibility=[Kurvenintervall==8] period=2W refresh=15000
+					Chart item=kon6_Battery visibility=[Kurvenintervall==9] period=M refresh=15000
+					Chart item=kon6_Battery visibility=[Kurvenintervall==10] period=2M refresh=15000
+					Chart item=kon6_Battery visibility=[Kurvenintervall==11] period=4M refresh=15000
+					Chart item=kon6_Battery visibility=[Kurvenintervall==12] period=Y refresh=15000
+				} 
+			}		
+			
+		}
+	}
+	
+	Frame label="Automatisierungseinstellungen" {
+		Text label="Schalter" icon="switch" {
+			Frame label="Systemfunktionen" {
+				Switch 	item=swRollladen_automatik
+				Switch 	item=swRollladensteuerungSonne
+
+				Switch 	item=swRadio_Morgens
+				Switch 	item=Energieverbrauch_anzeigen
+				
+				Switch 	item=DoorBird_anzeigen
+				Switch 	item=swPostmeldung
+
+				Switch	item=swNachtmodus
+				Switch 	item=swUrlaubsmodus
+				
+				Switch 	item=swHausueberwachung
+				
+				Switch 	item=swHeizungSignalisieren
+				Switch	item=swBatterieMelden
+				
+				Text 			icon="none"
+			}
+						
+			Frame label="Systemstart & Test" {
+				Switch	item=swOpenHabMaster				
+				Switch item=swTestSwitch
+
+				Switch item=swTestSwitchKeller			
+				Switch item=swTestSwitchWohnzimmer
+				Switch item=swTestSwitchFlur
+				Switch item=swTestSwitchTreppe
+				
+				Switch item=swRulePreload	
+				Switch item=swSystemstart
+			}
+		}
+	}
+	
+	Frame label="Test von Funktionen" {
+	
+	    Text label="Sonnensteuerung Rollläden" {
+		
+			Switch 	item=swRollladen_automatik
+			Switch 	item=swRollladensteuerungSonne
+			Switch 	item=swRollladen_ProgSun						mappings=[ON="Ein",OFF="Aus"]
+			Text    item=rol_Shutter_Summe 
+		//	Text 			icon="none"
+			Switch item=rol3_Shutter			label="R3" 			mappings=[UP="auf", STOP="X", DOWN="zu"]
+			Switch item=rol5_Shutter			label="R5" 			mappings=[UP="auf", STOP="X", DOWN="zu"]
+			
+			Text item=RolSunOstenAn
+			Text item=RolSunOstenAus
+			Text item=RolSunOstenLux
+			Text item=RolSunOstenText
+
+			Text item=RolSunSuedenAn
+			Text item=RolSunSuedenAus
+			Text item=RolSunSuedenLux
+			Text item=RolSunSuedenText
+			
+
+			Chart item=gRolSun  period=h refresh=15000
+			Chart item=gRolLux  period=h refresh=15000
+			Chart item=gRoll_Kurve period=h refresh=15000
+	
+			Chart item=gRolSun  period=4h refresh=15000
+			Chart item=gRolLux  period=4h refresh=15000
+			Chart item=gRoll_Kurve period=4h refresh=15000
+			
+			Chart item=gRolSun  period=D refresh=15000
+			Chart item=gRolLux  period=D refresh=15000
+			Chart item=gRoll_Kurve period=D refresh=15000
+			
+		}
+
+		Text label="Anwesenheitskontrolle" {
+			
+			Switch 	item=swThomasDa
+			Switch	item=swBirgitDa
+			Switch	item=swTobiasDa
+			Switch	item=swKatrinDa
+			
+			Switch   item=ipHDY81
+			Switch   item=ipHDY82
+			Switch   item=ipHDY85
+
+			
+			Chart item=gAnwesenheit period=h refresh=15000
+			Chart item=gAnwesenheit period=8h refresh=15000
+			Chart item=gAnwesenheit period=D refresh=15000
+			
+			Chart item=gAnwesend_Kurve period=h refresh=15000
+			Chart item=gAnwesend_Kurve period=8h refresh=15000
+			Chart item=gAnwesend_Kurve period=D refresh=15000
+			
+			Chart item=gMove_Kurve period=h refresh=15000
+			Chart item=gMove_Kurve period=8h refresh=15000
+			Chart item=gMove_Kurve period=D refresh=15000
+
+			
+		}
+		
+		Text label="IP-Check" {
+			
+			Switch  item=ipDM195
+			Text	item=ipDM195ms 
+
+			Switch  item=ipDM196
+			Text	item=ipDM196ms 
+
+			Switch  item=ipDM197
+			Text	item=ipDM197ms 
+			
+			Switch  item=ipDM198
+			Text	item=ipDM198ms  
+			
+			Switch   item=ipHDY81
+			Switch   item=ipHDY82
+			Switch   item=ipHDY83
+			Switch   item=ipHDY84
+			
+			
+						
+//			Text 	item = ipFS_TFms
+//			Switch 	item = ipFS_TF
+			
+			//Switch 	item = ipGoogle
+			//Text 	item = ipGooglems
+			
+
+		}
+		
+		Text label="Kurven" {
+								
+			Switch item=swTestSwitch
+			Switch item=Fehler_Heizkessel	label= "Fehler Heizkessel" icon="siren"	mappings=[ON="Fehler",OFF="OK"]  // Damit ich testen kann
+
+			Text icon="none"
+			
+			Text item=DoorBird_Motion icon="line" label="DoorBird Verlauf" {
+
+				Switch item=DoorBird_Motion_Register
+				Switch item=DoorBird_Motion
+
+				Switch item=DoorBird_Bell_Register
+				Switch item=DoorBird_Bell
+				
+
+				Switch item=Kurvenintervall  mappings=[1=1h, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+				Chart item=gDoorBird visibility=[Kurvenintervall==1] period=h refresh=15000
+				Chart item=gDoorBird visibility=[Kurvenintervall==2] period=4h refresh=15000
+				Chart item=gDoorBird visibility=[Kurvenintervall==3] period=8h refresh=15000
+				Chart item=gDoorBird visibility=[Kurvenintervall==4] period=12h refresh=15000
+				Chart item=gDoorBird visibility=[Kurvenintervall==5] period=D refresh=15000
+				Chart item=gDoorBird visibility=[Kurvenintervall==6] period=3D refresh=15000
+				Chart item=gDoorBird visibility=[Kurvenintervall==7] period=W refresh=15000
+				Chart item=gDoorBird visibility=[Kurvenintervall==8] period=2W refresh=15000
+				Chart item=gDoorBird visibility=[Kurvenintervall==9] period=M refresh=15000
+				Chart item=gDoorBird visibility=[Kurvenintervall==10] period=2M refresh=15000
+				Chart item=gDoorBird visibility=[Kurvenintervall==11] period=4M refresh=15000
+				Chart item=gDoorBird visibility=[Kurvenintervall==12] period=Y refresh=15000
+				
+				
+				Chart item=DoorBird_Motion visibility=[Kurvenintervall==1] period=h refresh=15000
+				Chart item=DoorBird_Motion visibility=[Kurvenintervall==2] period=4h refresh=15000
+				Chart item=DoorBird_Motion visibility=[Kurvenintervall==3] period=8h refresh=15000
+				Chart item=DoorBird_Motion visibility=[Kurvenintervall==4] period=12h refresh=15000
+				Chart item=DoorBird_Motion visibility=[Kurvenintervall==5] period=D refresh=15000
+				Chart item=DoorBird_Motion visibility=[Kurvenintervall==6] period=3D refresh=15000
+				Chart item=DoorBird_Motion visibility=[Kurvenintervall==7] period=W refresh=15000
+				Chart item=DoorBird_Motion visibility=[Kurvenintervall==8] period=2W refresh=15000
+				Chart item=DoorBird_Motion visibility=[Kurvenintervall==9] period=M refresh=15000
+				Chart item=DoorBird_Motion visibility=[Kurvenintervall==10] period=2M refresh=15000
+				Chart item=DoorBird_Motion visibility=[Kurvenintervall==11] period=4M refresh=15000
+				Chart item=DoorBird_Motion visibility=[Kurvenintervall==12] period=Y refresh=15000
+
+				Chart item=DoorBird_Bell visibility=[Kurvenintervall==1] period=h refresh=15000
+				Chart item=DoorBird_Bell visibility=[Kurvenintervall==2] period=4h refresh=15000
+				Chart item=DoorBird_Bell visibility=[Kurvenintervall==3] period=8h refresh=15000
+				Chart item=DoorBird_Bell visibility=[Kurvenintervall==4] period=12h refresh=15000
+				Chart item=DoorBird_Bell visibility=[Kurvenintervall==5] period=D refresh=15000
+				Chart item=DoorBird_Bell visibility=[Kurvenintervall==6] period=3D refresh=15000
+				Chart item=DoorBird_Bell visibility=[Kurvenintervall==7] period=W refresh=15000
+				Chart item=DoorBird_Bell visibility=[Kurvenintervall==8] period=2W refresh=15000
+				Chart item=DoorBird_Bell visibility=[Kurvenintervall==9] period=M refresh=15000
+				Chart item=DoorBird_Bell visibility=[Kurvenintervall==10] period=2M refresh=15000
+				Chart item=DoorBird_Bell visibility=[Kurvenintervall==11] period=4M refresh=15000
+				Chart item=DoorBird_Bell visibility=[Kurvenintervall==12] period=Y refresh=15000
+				
+				
+				Chart item=DoorBirdMotion visibility=[Kurvenintervall==1] period=h refresh=15000
+				Chart item=DoorBirdMotion visibility=[Kurvenintervall==2] period=4h refresh=15000
+				Chart item=DoorBirdMotion visibility=[Kurvenintervall==3] period=8h refresh=15000
+				Chart item=DoorBirdMotion visibility=[Kurvenintervall==4] period=12h refresh=15000
+				Chart item=DoorBirdMotion visibility=[Kurvenintervall==5] period=D refresh=15000
+				Chart item=DoorBirdMotion visibility=[Kurvenintervall==6] period=3D refresh=15000
+				Chart item=DoorBirdMotion visibility=[Kurvenintervall==7] period=W refresh=15000
+				Chart item=DoorBirdMotion visibility=[Kurvenintervall==8] period=2W refresh=15000
+				Chart item=DoorBirdMotion visibility=[Kurvenintervall==9] period=M refresh=15000
+				Chart item=DoorBirdMotion visibility=[Kurvenintervall==10] period=2M refresh=15000
+				Chart item=DoorBirdMotion visibility=[Kurvenintervall==11] period=4M refresh=15000
+				Chart item=DoorBirdMotion visibility=[Kurvenintervall==12] period=Y refresh=15000
+
+				Chart item=DoorBirdBell visibility=[Kurvenintervall==1] period=h refresh=15000
+				Chart item=DoorBirdBell visibility=[Kurvenintervall==2] period=4h refresh=15000
+				Chart item=DoorBirdBell visibility=[Kurvenintervall==3] period=8h refresh=15000
+				Chart item=DoorBirdBell visibility=[Kurvenintervall==4] period=12h refresh=15000
+				Chart item=DoorBirdBell visibility=[Kurvenintervall==5] period=D refresh=15000
+				Chart item=DoorBirdBell visibility=[Kurvenintervall==6] period=3D refresh=15000
+				Chart item=DoorBirdBell visibility=[Kurvenintervall==7] period=W refresh=15000
+				Chart item=DoorBirdBell visibility=[Kurvenintervall==8] period=2W refresh=15000
+				Chart item=DoorBirdBell visibility=[Kurvenintervall==9] period=M refresh=15000
+				Chart item=DoorBirdBell visibility=[Kurvenintervall==10] period=2M refresh=15000
+				Chart item=DoorBirdBell visibility=[Kurvenintervall==11] period=4M refresh=15000
+				Chart item=DoorBirdBell visibility=[Kurvenintervall==12] period=Y refresh=15000
+
+			}	
+			
+			Text item=gLUX icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+				Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+				Chart item=gLUXhue visibility=[Kurvenintervall==1] period=h refresh=15000
+				Chart item=gLUXhue visibility=[Kurvenintervall==2] period=4h refresh=15000
+				Chart item=gLUXhue visibility=[Kurvenintervall==3] period=8h refresh=15000
+				Chart item=gLUXhue visibility=[Kurvenintervall==4] period=12h refresh=15000
+				Chart item=gLUXhue visibility=[Kurvenintervall==5] period=D refresh=15000
+				Chart item=gLUXhue visibility=[Kurvenintervall==6] period=3D refresh=15000
+				Chart item=gLUXhue visibility=[Kurvenintervall==7] period=W refresh=15000
+				Chart item=gLUXhue visibility=[Kurvenintervall==8] period=2W refresh=15000
+				Chart item=gLUXhue visibility=[Kurvenintervall==9] period=M refresh=15000
+				Chart item=gLUXhue visibility=[Kurvenintervall==10] period=2M refresh=15000
+				Chart item=gLUXhue visibility=[Kurvenintervall==11] period=4M refresh=15000
+				Chart item=gLUXhue visibility=[Kurvenintervall==12] period=Y refresh=15000
+				
+				Chart item=gLUXeye visibility=[Kurvenintervall==1] period=h refresh=15000
+				Chart item=gLUXeye visibility=[Kurvenintervall==2] period=4h refresh=15000
+				Chart item=gLUXeye visibility=[Kurvenintervall==3] period=8h refresh=15000
+				Chart item=gLUXeye visibility=[Kurvenintervall==4] period=12h refresh=15000
+				Chart item=gLUXeye visibility=[Kurvenintervall==5] period=D refresh=15000
+				Chart item=gLUXeye visibility=[Kurvenintervall==6] period=3D refresh=15000
+				Chart item=gLUXeye visibility=[Kurvenintervall==7] period=W refresh=15000
+				Chart item=gLUXeye visibility=[Kurvenintervall==8] period=2W refresh=15000
+				Chart item=gLUXeye visibility=[Kurvenintervall==9] period=M refresh=15000
+				Chart item=gLUXeye visibility=[Kurvenintervall==10] period=2M refresh=15000
+				Chart item=gLUXeye visibility=[Kurvenintervall==11] period=4M refresh=15000
+				Chart item=gLUXeye visibility=[Kurvenintervall==12] period=Y refresh=15000
+
+			//Text item=gRoll_Kurve icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+				Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+				Chart item=gRoll_Kurve visibility=[Kurvenintervall==1] period=h refresh=15000
+				Chart item=gRoll_Kurve visibility=[Kurvenintervall==2] period=4h refresh=15000
+				Chart item=gRoll_Kurve visibility=[Kurvenintervall==3] period=8h refresh=15000
+				Chart item=gRoll_Kurve visibility=[Kurvenintervall==4] period=12h refresh=15000
+				Chart item=gRoll_Kurve visibility=[Kurvenintervall==5] period=D refresh=15000
+				Chart item=gRoll_Kurve visibility=[Kurvenintervall==6] period=3D refresh=15000
+				Chart item=gRoll_Kurve visibility=[Kurvenintervall==7] period=W refresh=15000
+				Chart item=gRoll_Kurve visibility=[Kurvenintervall==8] period=2W refresh=15000
+				Chart item=gRoll_Kurve visibility=[Kurvenintervall==9] period=M refresh=15000
+				Chart item=gRoll_Kurve visibility=[Kurvenintervall==10] period=2M refresh=15000
+				Chart item=gRoll_Kurve visibility=[Kurvenintervall==11] period=4M refresh=15000
+				Chart item=gRoll_Kurve visibility=[Kurvenintervall==12] period=Y refresh=15000
+			//}	
+	
+			} 
+			
+			Text item=gBattery icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+				Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+
+				Chart item=gBattEye visibility=[Kurvenintervall==1] period=h refresh=15000
+				Chart item=gBattEye visibility=[Kurvenintervall==2] period=4h refresh=15000
+				Chart item=gBattEye visibility=[Kurvenintervall==3] period=8h refresh=15000
+				Chart item=gBattEye visibility=[Kurvenintervall==4] period=12h refresh=15000
+				Chart item=gBattEye visibility=[Kurvenintervall==5] period=D refresh=15000
+				Chart item=gBattEye visibility=[Kurvenintervall==6] period=3D refresh=15000
+				Chart item=gBattEye visibility=[Kurvenintervall==7] period=W refresh=15000
+				Chart item=gBattEye visibility=[Kurvenintervall==8] period=2W refresh=15000
+				Chart item=gBattEye visibility=[Kurvenintervall==9] period=M refresh=15000
+				Chart item=gBattEye visibility=[Kurvenintervall==10] period=2M refresh=15000
+				Chart item=gBattEye visibility=[Kurvenintervall==11] period=4M refresh=15000
+				Chart item=gBattEye visibility=[Kurvenintervall==12] period=Y refresh=15000
+
+				Chart item=gBattKon visibility=[Kurvenintervall==1] period=h refresh=15000
+				Chart item=gBattKon visibility=[Kurvenintervall==2] period=4h refresh=15000
+				Chart item=gBattKon visibility=[Kurvenintervall==3] period=8h refresh=15000
+				Chart item=gBattKon visibility=[Kurvenintervall==4] period=12h refresh=15000
+				Chart item=gBattKon visibility=[Kurvenintervall==5] period=D refresh=15000
+				Chart item=gBattKon visibility=[Kurvenintervall==6] period=3D refresh=15000
+				Chart item=gBattKon visibility=[Kurvenintervall==7] period=W refresh=15000
+				Chart item=gBattKon visibility=[Kurvenintervall==8] period=2W refresh=15000
+				Chart item=gBattKon visibility=[Kurvenintervall==9] period=M refresh=15000
+				Chart item=gBattKon visibility=[Kurvenintervall==10] period=2M refresh=15000
+				Chart item=gBattKon visibility=[Kurvenintervall==11] period=4M refresh=15000
+				Chart item=gBattKon visibility=[Kurvenintervall==12] period=Y refresh=15000
+
+				Chart item=gBattFlo visibility=[Kurvenintervall==1] period=h refresh=15000
+				Chart item=gBattFlo visibility=[Kurvenintervall==2] period=4h refresh=15000
+				Chart item=gBattFlo visibility=[Kurvenintervall==3] period=8h refresh=15000
+				Chart item=gBattFlo visibility=[Kurvenintervall==4] period=12h refresh=15000
+				Chart item=gBattFlo visibility=[Kurvenintervall==5] period=D refresh=15000
+				Chart item=gBattFlo visibility=[Kurvenintervall==6] period=3D refresh=15000
+				Chart item=gBattFlo visibility=[Kurvenintervall==7] period=W refresh=15000
+				Chart item=gBattFlo visibility=[Kurvenintervall==8] period=2W refresh=15000
+				Chart item=gBattFlo visibility=[Kurvenintervall==9] period=M refresh=15000
+				Chart item=gBattFlo visibility=[Kurvenintervall==10] period=2M refresh=15000
+				Chart item=gBattFlo visibility=[Kurvenintervall==11] period=4M refresh=15000
+				Chart item=gBattFlo visibility=[Kurvenintervall==12] period=Y refresh=15000
+
+			} 
+			
+			
+			Text item=gMove icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+				Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+				Chart item=gMove visibility=[Kurvenintervall==1] period=h refresh=15000
+				Chart item=gMove visibility=[Kurvenintervall==2] period=4h refresh=15000
+				Chart item=gMove visibility=[Kurvenintervall==3] period=8h refresh=15000
+				Chart item=gMove visibility=[Kurvenintervall==4] period=12h refresh=15000
+				Chart item=gMove visibility=[Kurvenintervall==5] period=D refresh=15000
+				Chart item=gMove visibility=[Kurvenintervall==6] period=3D refresh=15000
+				Chart item=gMove visibility=[Kurvenintervall==7] period=W refresh=15000
+				Chart item=gMove visibility=[Kurvenintervall==8] period=2W refresh=15000
+				Chart item=gMove visibility=[Kurvenintervall==9] period=M refresh=15000
+				Chart item=gMove visibility=[Kurvenintervall==10] period=2M refresh=15000
+				Chart item=gMove visibility=[Kurvenintervall==11] period=4M refresh=15000
+				Chart item=gMove visibility=[Kurvenintervall==12] period=Y refresh=15000
+			} 
+			
+			Text item=gTemp icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+				Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+				
+				// Chart item=gTemp visibility=[Kurvenintervall==1] period=h refresh=15000
+				// Chart item=gTemp visibility=[Kurvenintervall==2] period=4h refresh=15000
+				// Chart item=gTemp visibility=[Kurvenintervall==3] period=8h refresh=15000
+				// Chart item=gTemp visibility=[Kurvenintervall==4] period=12h refresh=15000
+				// Chart item=gTemp visibility=[Kurvenintervall==5] period=D refresh=15000
+				// Chart item=gTemp visibility=[Kurvenintervall==6] period=3D refresh=15000
+				// Chart item=gTemp visibility=[Kurvenintervall==7] period=W refresh=15000
+				// Chart item=gTemp visibility=[Kurvenintervall==8] period=2W refresh=15000
+				// Chart item=gTemp visibility=[Kurvenintervall==9] period=M refresh=15000
+				// Chart item=gTemp visibility=[Kurvenintervall==10] period=2M refresh=15000
+				// Chart item=gTemp visibility=[Kurvenintervall==11] period=4M refresh=15000
+				// Chart item=gTemp visibility=[Kurvenintervall==12] period=Y refresh=15000
+				
+					
+				Chart item=gTempWZ visibility=[Kurvenintervall==1] period=h refresh=15000
+				Chart item=gTempWZ visibility=[Kurvenintervall==2] period=4h refresh=15000
+				Chart item=gTempWZ visibility=[Kurvenintervall==3] period=8h refresh=15000
+				Chart item=gTempWZ visibility=[Kurvenintervall==4] period=12h refresh=15000
+				Chart item=gTempWZ visibility=[Kurvenintervall==5] period=D refresh=15000
+				Chart item=gTempWZ visibility=[Kurvenintervall==6] period=3D refresh=15000
+				Chart item=gTempWZ visibility=[Kurvenintervall==7] period=W refresh=15000
+				Chart item=gTempWZ visibility=[Kurvenintervall==8] period=2W refresh=15000
+				Chart item=gTempWZ visibility=[Kurvenintervall==9] period=M refresh=15000
+				Chart item=gTempWZ visibility=[Kurvenintervall==10] period=2M refresh=15000
+				Chart item=gTempWZ visibility=[Kurvenintervall==11] period=4M refresh=15000
+				Chart item=gTempWZ visibility=[Kurvenintervall==12] period=Y refresh=15000
+			
+				Chart item=gTempTP visibility=[Kurvenintervall==1] period=h refresh=15000
+				Chart item=gTempTP visibility=[Kurvenintervall==2] period=4h refresh=15000
+				Chart item=gTempTP visibility=[Kurvenintervall==3] period=8h refresh=15000
+				Chart item=gTempTP visibility=[Kurvenintervall==4] period=12h refresh=15000
+				Chart item=gTempTP visibility=[Kurvenintervall==5] period=D refresh=15000
+				Chart item=gTempTP visibility=[Kurvenintervall==6] period=3D refresh=15000
+				Chart item=gTempTP visibility=[Kurvenintervall==7] period=W refresh=15000
+				Chart item=gTempTP visibility=[Kurvenintervall==8] period=2W refresh=15000
+				Chart item=gTempTP visibility=[Kurvenintervall==9] period=M refresh=15000
+				Chart item=gTempTP visibility=[Kurvenintervall==10] period=2M refresh=15000
+				Chart item=gTempTP visibility=[Kurvenintervall==11] period=4M refresh=15000
+				Chart item=gTempTP visibility=[Kurvenintervall==12] period=Y refresh=15000
+				
+				Chart item=gTempHZ visibility=[Kurvenintervall==1] period=h refresh=15000
+				Chart item=gTempHZ visibility=[Kurvenintervall==2] period=4h refresh=15000
+				Chart item=gTempHZ visibility=[Kurvenintervall==3] period=8h refresh=15000
+				Chart item=gTempHZ visibility=[Kurvenintervall==4] period=12h refresh=15000
+				Chart item=gTempHZ visibility=[Kurvenintervall==5] period=D refresh=15000
+				Chart item=gTempHZ visibility=[Kurvenintervall==6] period=3D refresh=15000
+				Chart item=gTempHZ visibility=[Kurvenintervall==7] period=W refresh=15000
+				Chart item=gTempHZ visibility=[Kurvenintervall==8] period=2W refresh=15000
+				Chart item=gTempHZ visibility=[Kurvenintervall==9] period=M refresh=15000
+				Chart item=gTempHZ visibility=[Kurvenintervall==10] period=2M refresh=15000
+				Chart item=gTempHZ visibility=[Kurvenintervall==11] period=4M refresh=15000
+				Chart item=gTempHZ visibility=[Kurvenintervall==12] period=Y refresh=15000
+
+				Chart item=gTempFlo visibility=[Kurvenintervall==1] period=h refresh=15000
+				Chart item=gTempFlo visibility=[Kurvenintervall==2] period=4h refresh=15000
+				Chart item=gTempFlo visibility=[Kurvenintervall==3] period=8h refresh=15000
+				Chart item=gTempFlo visibility=[Kurvenintervall==4] period=12h refresh=15000
+				Chart item=gTempFlo visibility=[Kurvenintervall==5] period=D refresh=15000
+				Chart item=gTempFlo visibility=[Kurvenintervall==6] period=3D refresh=15000
+				Chart item=gTempFlo visibility=[Kurvenintervall==7] period=W refresh=15000
+				Chart item=gTempFlo visibility=[Kurvenintervall==8] period=2W refresh=15000
+				Chart item=gTempFlo visibility=[Kurvenintervall==9] period=M refresh=15000
+				Chart item=gTempFlo visibility=[Kurvenintervall==10] period=2M refresh=15000
+				Chart item=gTempFlo visibility=[Kurvenintervall==11] period=4M refresh=15000
+				Chart item=gTempFlo visibility=[Kurvenintervall==12] period=Y refresh=15000
+
+				Chart item=gTempKon visibility=[Kurvenintervall==1] period=h refresh=15000
+				Chart item=gTempKon visibility=[Kurvenintervall==2] period=4h refresh=15000
+				Chart item=gTempKon visibility=[Kurvenintervall==3] period=8h refresh=15000
+				Chart item=gTempKon visibility=[Kurvenintervall==4] period=12h refresh=15000
+				Chart item=gTempKon visibility=[Kurvenintervall==5] period=D refresh=15000
+				Chart item=gTempKon visibility=[Kurvenintervall==6] period=3D refresh=15000
+				Chart item=gTempKon visibility=[Kurvenintervall==7] period=W refresh=15000
+				Chart item=gTempKon visibility=[Kurvenintervall==8] period=2W refresh=15000
+				Chart item=gTempKon visibility=[Kurvenintervall==9] period=M refresh=15000
+				Chart item=gTempKon visibility=[Kurvenintervall==10] period=2M refresh=15000
+				Chart item=gTempKon visibility=[Kurvenintervall==11] period=4M refresh=15000
+				Chart item=gTempKon visibility=[Kurvenintervall==12] period=Y refresh=15000
+
+			}
+			
+
+			Text item=gAnwesend_Kurve icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+				Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+				Chart item=gAnwesend_Kurve visibility=[Kurvenintervall==1] period=h refresh=15000
+				Chart item=gAnwesend_Kurve visibility=[Kurvenintervall==2] period=4h refresh=15000
+				Chart item=gAnwesend_Kurve visibility=[Kurvenintervall==3] period=8h refresh=15000
+				Chart item=gAnwesend_Kurve visibility=[Kurvenintervall==4] period=12h refresh=15000
+				Chart item=gAnwesend_Kurve visibility=[Kurvenintervall==5] period=D refresh=15000
+				Chart item=gAnwesend_Kurve visibility=[Kurvenintervall==6] period=3D refresh=15000
+				Chart item=gAnwesend_Kurve visibility=[Kurvenintervall==7] period=W refresh=15000
+				Chart item=gAnwesend_Kurve visibility=[Kurvenintervall==8] period=2W refresh=15000
+				Chart item=gAnwesend_Kurve visibility=[Kurvenintervall==9] period=M refresh=15000
+				Chart item=gAnwesend_Kurve visibility=[Kurvenintervall==10] period=2M refresh=15000
+				Chart item=gAnwesend_Kurve visibility=[Kurvenintervall==11] period=4M refresh=15000
+				Chart item=gAnwesend_Kurve visibility=[Kurvenintervall==12] period=Y refresh=15000
+				
+				Chart item=gAnwesenheit visibility=[Kurvenintervall==1] period=h refresh=15000
+				Chart item=gAnwesenheit visibility=[Kurvenintervall==2] period=4h refresh=15000
+				Chart item=gAnwesenheit visibility=[Kurvenintervall==3] period=8h refresh=15000
+				Chart item=gAnwesenheit visibility=[Kurvenintervall==4] period=12h refresh=15000
+				Chart item=gAnwesenheit visibility=[Kurvenintervall==5] period=D refresh=15000
+				Chart item=gAnwesenheit visibility=[Kurvenintervall==6] period=3D refresh=15000
+				Chart item=gAnwesenheit visibility=[Kurvenintervall==7] period=W refresh=15000
+				Chart item=gAnwesenheit visibility=[Kurvenintervall==8] period=2W refresh=15000
+				Chart item=gAnwesenheit visibility=[Kurvenintervall==9] period=M refresh=15000
+				Chart item=gAnwesenheit visibility=[Kurvenintervall==10] period=2M refresh=15000
+				Chart item=gAnwesenheit visibility=[Kurvenintervall==11] period=4M refresh=15000
+				Chart item=gAnwesenheit visibility=[Kurvenintervall==12] period=Y refresh=15000
+			} 
+			
+			
+			
+			Text item=gTamper icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+				Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+				Chart item=gTamper visibility=[Kurvenintervall==1] period=h refresh=15000
+				Chart item=gTamper visibility=[Kurvenintervall==2] period=4h refresh=15000
+				Chart item=gTamper visibility=[Kurvenintervall==3] period=8h refresh=15000
+				Chart item=gTamper visibility=[Kurvenintervall==4] period=12h refresh=15000
+				Chart item=gTamper visibility=[Kurvenintervall==5] period=D refresh=15000
+				Chart item=gTamper visibility=[Kurvenintervall==6] period=3D refresh=15000
+				Chart item=gTamper visibility=[Kurvenintervall==7] period=W refresh=15000
+				Chart item=gTamper visibility=[Kurvenintervall==8] period=2W refresh=15000
+				Chart item=gTamper visibility=[Kurvenintervall==9] period=M refresh=15000
+				Chart item=gTamper visibility=[Kurvenintervall==10] period=2M refresh=15000
+				Chart item=gTamper visibility=[Kurvenintervall==11] period=4M refresh=15000
+				Chart item=gTamper visibility=[Kurvenintervall==12] period=Y refresh=15000
+			} 
+			
+			Text item=gSeismic icon="line" { // h,4h,8h,12h,D,3D,W,2W,M,2M,4M,Y
+				Switch item=Kurvenintervall  mappings=[1=Stunde, 2=4h, 3=8h, 4=12h, 5=Tag, 6=3T, 7=Woche, 8=2W, 9=Monat, 10=2M, 11=4M, 12=Jahr]
+				Chart item=gSeismic visibility=[Kurvenintervall==1] period=h refresh=15000
+				Chart item=gSeismic visibility=[Kurvenintervall==2] period=4h refresh=15000
+				Chart item=gSeismic visibility=[Kurvenintervall==3] period=8h refresh=15000
+				Chart item=gSeismic visibility=[Kurvenintervall==4] period=12h refresh=15000
+				Chart item=gSeismic visibility=[Kurvenintervall==5] period=D refresh=15000
+				Chart item=gSeismic visibility=[Kurvenintervall==6] period=3D refresh=15000
+				Chart item=gSeismic visibility=[Kurvenintervall==7] period=W refresh=15000
+				Chart item=gSeismic visibility=[Kurvenintervall==8] period=2W refresh=15000
+				Chart item=gSeismic visibility=[Kurvenintervall==9] period=M refresh=15000
+				Chart item=gSeismic visibility=[Kurvenintervall==10] period=2M refresh=15000
+				Chart item=gSeismic visibility=[Kurvenintervall==11] period=4M refresh=15000
+				Chart item=gSeismic visibility=[Kurvenintervall==12] period=Y refresh=15000
+			} 			
+			
+			
+		}
+	}
+ 		
+}
